@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="opencv-test">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/opencv/build/java_test/build/jar/opencv-test.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
