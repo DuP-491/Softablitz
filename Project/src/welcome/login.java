@@ -34,7 +34,11 @@ public class login {
             if(resultSet.next())
             {
                 if(password.equals(resultSet.getString("password")))
+                {
                     System.out.println("Login Sucessful");
+                    HomeScreen h=new HomeScreen(username);
+                    h.main(null);
+                }
                 else
                     System.out.println("Password Incorrect");
             }
