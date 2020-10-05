@@ -10,24 +10,24 @@
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../Libraries/opencv/build/java/opencv-430.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../../Program Files/mysql-connector.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <NATIVE>
-          <root url="file://$MODULE_DIR$/../Libraries/opencv/build/java/x64" />
-        </NATIVE>
-        <SOURCES>
-          <root url="jar://$MODULE_DIR$/../Libraries/opencv/build/java/opencv-430.jar!/" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library>
         <CLASSES>
-          <root url="jar://$MODULE_DIR$/../../Program Files/mysql-connector.jar!/" />
+          <root url="jar://$MODULE_DIR$/../../../Libraries/opencv/build/java/opencv-430.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES />
+        <NATIVE>
+          <root url="file://$MODULE_DIR$/../../../Libraries/opencv/build/java/x64" />
+        </NATIVE>
+        <SOURCES>
+          <root url="jar://$MODULE_DIR$/../../../Libraries/opencv/build/java/opencv-430.jar!/" />
+        </SOURCES>
       </library>
     </orderEntry>
   </component>
