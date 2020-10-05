@@ -14,4 +14,14 @@ public class User {
     private String bio;
     private String dpLocation;
     private Status status;
+
+    public User(String username, String password, String name, String bio, String dpLocation, Status status) {
+        this.username = username;
+        this.password = password;
+        this.name = name;
+        this.bio = bio;
+        this.dpLocation = dpLocation;
+        this.status = status;
+    }
+
 }
