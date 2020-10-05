@@ -12,9 +12,17 @@ public class Streamer extends User {
 
     public void stopStreaming() {
         //Handle stop streaming here
+        myStream.stopStream();
+    }
+
+    public void startStreaming() {
+        //Handle start streaming here
+        myStream.startStream();
     }
 
     public void setMode(int mode) {
         myStream.setMode(mode);
     }
+
+    //Above three functions are explicitly declared here instead of calling LiveStream functions directly so that other methods related to display can be called from here
 }
