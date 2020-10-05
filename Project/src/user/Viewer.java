@@ -24,4 +24,12 @@ public class Viewer extends User {
     public void getFollowList() {
         //query for follows in DB and update this.followList
     }
+
+    public void sendMessagetoAll() {
+        //Create message, add to DB and push it to streamer's stream
+    }
+
+    public void sendMessagetoSub() {
+        //Create message, add to DB and push it to streamer's stream
+    }
 }
