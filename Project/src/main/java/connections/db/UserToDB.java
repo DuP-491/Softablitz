@@ -86,11 +86,11 @@ public class UserToDB {
         return followList;
     }
 
-    public void addStreamtoDB() {
-
+    public void addStreamtoDB(Streamer self) {
+        
     }
 
-    public void removeStreamfromDB() {
+    public void removeStreamfromDB(Streamer self) {
 
     }
 

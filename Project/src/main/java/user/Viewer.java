@@ -1,12 +1,16 @@
 package user;
 
+import chat.ChatMessage;
+
+import java.time.LocalDateTime;
+
 public class Viewer extends User {
     private Streamer currentlyWatching;
     private User[] subList;
     private User[] followList;
 
-    public Viewer(String username, String password, String name, String bio, String dpLocation, Status status) {
-        super(username, password, name, bio, dpLocation, status);
+    public Viewer(String username, String name, String bio, String dpLocation, Status status) {
+        super(username, name, bio, dpLocation, status);
     }
 
     //Called whenever viewer starts watching anyone, or changes to someone else
@@ -22,14 +26,19 @@ public class Viewer extends User {
 
     //Will be called when viewing follow list or getting notifications in home screen
     public void getFollowList() {
+        followList = uToDB.getFollowList(this);
         //query for follows in DB and update this.followList
     }
 
-    public void sendMessagetoAll() {
+    public void sendMessagetoAll(String message) {
+        ChatMessage mes = new ChatMessage(this, currentlyWatching.getStream(), message, LocalDateTime.now(), 0);
+        currentlyWatching.getStream().pushMessage(mes);
         //Create message, add to DB and push it to streamer's stream
     }
 
-    public void sendMessagetoSub() {
+    public void sendMessagetoSub(String message) {
+        ChatMessage mes = new ChatMessage(this, currentlyWatching.getStream(), message, LocalDateTime.now(), 1);
+        currentlyWatching.getStream().pushMessage(mes);
         //Create message, add to DB and push it to streamer's stream
     }
 }

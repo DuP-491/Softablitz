@@ -5,25 +5,29 @@ import stream.LiveStream;
 public class Streamer extends User {
     private LiveStream myStream;
 
-    public Streamer(String username, String password, String name, String bio, String dpLocation, Status status, LiveStream myStream) {
-        super(username, password, name, bio, dpLocation, status);
+    public Streamer(String username, String name, String bio, String dpLocation, Status status, LiveStream myStream) {
+        super(username, name, bio, dpLocation, status);
         this.myStream = myStream;
     }
 
     public void stopStreaming() {
         //Handle stop streaming here
         myStream.stopStream();
-        uToDB.removeStreamfromDB();
+        uToDB.removeStreamfromDB(this);
     }
 
     public void startStreaming() {
         //Handle start streaming here
         myStream.startStream();
-        uToDB.addStreamtoDB();
+        uToDB.addStreamtoDB(this);
     }
 
     public void setMode(int mode) {
         myStream.setMode(mode);
+    }
+
+    public LiveStream getStream() {
+        return this.myStream;
     }
 
     @Override
