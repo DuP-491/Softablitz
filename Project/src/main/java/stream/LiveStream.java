@@ -1,7 +1,6 @@
 package stream;
 
 import chat.ChatMessage;
-import com.xuggle.xuggler.demos.DisplayWebcamVideo;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -95,7 +94,7 @@ public class LiveStream extends Thread {
     public void captureCam() {
         //Keep updating currentFrame by capturing webcam photos
         try {
-            currentFrame = webcam.getImage();
+            this.currentFrame = webcam.getImage();
         }
         catch(Exception e) {
             System.out.println("Meme");
