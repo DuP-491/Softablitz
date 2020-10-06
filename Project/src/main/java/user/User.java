@@ -1,5 +1,7 @@
 package user;
 
+import connections.db.UserToDB;
+
 enum Status {
     OFFLINE,
     ONLINE,
@@ -8,12 +10,13 @@ enum Status {
 }
 
 public class User {
-    private String username;
-    private String password;
-    private String name;
-    private String bio;
-    private String dpLocation;
-    private Status status;
+    protected String username;
+    protected String password;
+    protected String name;
+    protected String bio;
+    protected String dpLocation;
+    protected Status status;
+    protected UserToDB uToDB;
 
     public User(String username, String password, String name, String bio, String dpLocation, Status status) {
         this.username = username;
@@ -22,6 +25,7 @@ public class User {
         this.bio = bio;
         this.dpLocation = dpLocation;
         this.status = status;
+        this.uToDB = new UserToDB();
     }
 
 }

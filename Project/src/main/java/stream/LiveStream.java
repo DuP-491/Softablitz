@@ -10,15 +10,7 @@ import java.util.Queue;
 
 import com.github.sarxos.webcam.Webcam;
 
-enum Category {
-    LEAGUEOFLEGENDS,
-    DOTA2,
-    ROCKETLEAGUE,
-    GTAV,
-    MINECRAFT,
-    INDIEGAMES,
-    IRL
-}
+
 
 enum StreamMode {
     WEBCAM,
@@ -107,6 +99,10 @@ public class LiveStream extends Thread {
 
     public void refreshMessages() {
         //update both sub only and all user chat window
+    }
+
+    public String getTitle() {
+        return this.title;
     }
 
     public void run() {

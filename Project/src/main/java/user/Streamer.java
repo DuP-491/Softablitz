@@ -24,5 +24,10 @@ public class Streamer extends User {
         myStream.setMode(mode);
     }
 
+    @Override
+    public String toString() {
+        return (this.username + ": " + this.myStream.getTitle());
+    }
+
     //Above three functions are explicitly declared here instead of calling LiveStream functions directly so that other methods related to display can be called from here
 }

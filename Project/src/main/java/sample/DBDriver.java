@@ -3,13 +3,22 @@ package sample;
 import java.sql.*;
 
 public class DBDriver {
-    public static void main(String args[]) {
+
+    public DBDriver() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
+        }
+        catch (Exception e) {
+
+        }
+    }
+    public static void main(String args[]) {
+        try {
+            DBDriver d = new DBDriver();
             String password = "Bananasql1!";
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/helloworld?characterEncoding=latin1&useConfigs=maxPerformance","root",password);
-            update(con);
-            show(con);
+            d.update(con);
+            d.show(con);
             System.out.println("Done");
         }
         catch(Exception e) {
