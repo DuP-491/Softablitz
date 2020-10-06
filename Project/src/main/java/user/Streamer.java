@@ -13,11 +13,13 @@ public class Streamer extends User {
     public void stopStreaming() {
         //Handle stop streaming here
         myStream.stopStream();
+        uToDB.removeStreamfromDB();
     }
 
     public void startStreaming() {
         //Handle start streaming here
         myStream.startStream();
+        uToDB.addStreamtoDB();
     }
 
     public void setMode(int mode) {
