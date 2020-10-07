@@ -1,6 +1,7 @@
 package sample;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 import javax.swing.JFrame;
@@ -38,4 +39,32 @@ public class Mc2 extends Canvas{
         }
     }
 
+}
+
+class ScreenCap extends Thread {
+
+    Robot robot;
+    BufferedImage bufImage;
+
+    public ScreenCap() {
+        try {
+            robot = new Robot();
+        }
+        catch(Exception e) {
+            System.out.println("bruh");
+        }
+    }
+
+    public void run()  {
+        while(true) {
+            try {
+                Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+                Rectangle screenRectangle = new Rectangle(screenSize);
+                bufImage = robot.createScreenCapture(screenRectangle);
+
+            } catch (Exception E) {
+                System.out.println("Meme");
+            }
+        }
+    }
 }

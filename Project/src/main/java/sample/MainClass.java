@@ -1,6 +1,9 @@
 package sample;
 
+import com.github.sarxos.webcam.Webcam;
+
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import javax.swing.*;
 
 import javax.swing.JFrame;
@@ -38,4 +41,26 @@ public class MainClass extends Canvas{
         }
     }
 
+}
+
+class VideoMake extends Thread {
+
+    Webcam webcam;
+    BufferedImage bufImage;
+
+    public VideoMake() {
+        webcam = Webcam.getDefault();
+        webcam.open();
+    }
+
+    public void run()  {
+        while(true) {
+            try {
+                bufImage = webcam.getImage();
+            }
+            catch(Exception e) {
+                System.out.println("Meme");
+            }
+        }
+    }
 }

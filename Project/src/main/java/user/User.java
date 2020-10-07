@@ -18,10 +18,14 @@ public class User {
         this.bio = bio;
         this.dpLocation = dpLocation;
         this.status = status;
-        this.uToDB = new UserToDB();
     }
 
     public String getUsername() {
         return this.username;
     }
+
+    public void startDBConnection() {
+        uToDB = new UserToDB();
+    }
+
 }
