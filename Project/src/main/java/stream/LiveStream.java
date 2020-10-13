@@ -8,12 +8,14 @@ import java.util.LinkedList;
 
 import chat.MessageReciever;
 import chat.MessageSender;
+import user.Streamer;
 
 import javax.swing.*;
 
 
 public class LiveStream extends Canvas implements Runnable {
     protected int viewCount;
+    protected Streamer streamer;
     protected LocalDateTime startedAtTime;
     protected Category category;
     protected String title;
@@ -21,6 +23,8 @@ public class LiveStream extends Canvas implements Runnable {
     protected boolean running;
     protected LinkedList<ChatMessage> allUsersMessageQueue;
     protected LinkedList<ChatMessage> subOnlyMessageQueue;
+
+    protected int ID;
 
     protected ImageReciever imageReciever;
     protected AudioReciever audioReciever;
@@ -35,16 +39,22 @@ public class LiveStream extends Canvas implements Runnable {
     protected JFrame j;
 
 
-    public LiveStream(String title, Category cat, int id) {
+    public LiveStream(String title, Category cat, int id, Streamer streamer) {
+        this.ID = id;
+        this.streamer = streamer;
         this.startedAtTime = LocalDateTime.now();
         this.category = cat;
         this.title = title;
         allUsersMessageQueue = new LinkedList<ChatMessage>();
         subOnlyMessageQueue = new LinkedList<ChatMessage>();
 
-        String imageGroup = "225.4.6." + Integer.toString(id);
-        String audioGroup = "225.4.6." + Integer.toString(id+1);
-        String messageGroup = "225.4.6." + Integer.toString(id+2);
+    }
+
+    //This will be called on the machine where we want to view
+    public void startWatching() {
+        String imageGroup = "225.4.6." + Integer.toString(ID);
+        String audioGroup = "225.4.6." + Integer.toString(ID+1);
+        String messageGroup = "225.4.6." + Integer.toString(ID+2);
 
         imageReciever = new ImageReciever(imageGroup, this);
         audioReciever = new AudioReciever(audioGroup, this);
@@ -111,12 +121,18 @@ public class LiveStream extends Canvas implements Runnable {
     public void update() {
         try {
             Graphics g = this.getGraphics();
-            g.drawString(title + ": " + category,50,50);
+            g.drawString(this + "",50,50);
             //System.out.println(b);
             ImageIcon im = new ImageIcon(imageReciever.currentFrame);
             im.paintIcon(this, g, 50, 60);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public String toString() {
+        String ans = streamer.getUsername() + ": " + title + " in " + category;
+        return ans;
     }
 }

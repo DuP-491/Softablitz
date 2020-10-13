@@ -24,8 +24,9 @@ public class Streamer extends User {
 
         //Ask IDAssigner for id
         int id = 0;
-        myStream = new LiveStreamSource(title, cat, id);
+        myStream = new LiveStreamSource(title, cat, id, this);
         uToDB.addStreamtoDB(this);
+        myStream.startStreaming();
     }
 
     public void setMode(int mode) {
@@ -35,10 +36,4 @@ public class Streamer extends User {
     public LiveStream getStream() {
         return this.myStream;
     }
-
-    @Override
-    public String toString() {
-        return (this.username + ": " + this.myStream.getTitle());
-    }
-
 }

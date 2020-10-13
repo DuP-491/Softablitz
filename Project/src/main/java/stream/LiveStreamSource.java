@@ -1,13 +1,18 @@
 package stream;
 
+import user.Streamer;
+
 public class LiveStreamSource extends LiveStream {
     private ImageSender imageSender;
     private AudioSender audioSender;
 
-    public LiveStreamSource(String title, Category cat, int id) {
-        super(title, cat, id);
-        String imageGroup = "225.4.6." + Integer.toString(id);
-        String audioGroup = "225.4.6." + Integer.toString(id+1);
+    public LiveStreamSource(String title, Category cat, int id, Streamer streamer) {
+        super(title, cat, id, streamer);
+    }
+
+    public void startStreaming() {
+        String imageGroup = "225.4.6." + Integer.toString(ID);
+        String audioGroup = "225.4.6." + Integer.toString(ID+1);
 
         imageSender = new ImageSender(imageGroup, this);
         audioSender = new AudioSender(audioGroup);
