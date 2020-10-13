@@ -114,7 +114,7 @@ public class StreamerClient extends Canvas implements Runnable {
         j.add(this);
         j.setSize(1000,800);
         j.setVisible(true);
-        j.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        j.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         try {
             while (true) {
                 this.captureCam();

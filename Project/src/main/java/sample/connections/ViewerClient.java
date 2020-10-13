@@ -28,7 +28,7 @@ public class ViewerClient extends Thread {
             d.j.add(d);
             d.j.setSize(1000,800);
             d.j.setVisible(true);
-            d.j.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+            d.j.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         }catch (Exception e) {
             e.printStackTrace();
         }
