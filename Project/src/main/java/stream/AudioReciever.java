@@ -5,7 +5,7 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
 
-public class AudioReciever {
+public class AudioReciever extends Thread {
     private String group;
     private MulticastSocket msocket;
     private DatagramPacket dpacket;
@@ -18,11 +18,13 @@ public class AudioReciever {
     private byte[] data;
 
     private boolean running;
+    private LiveStream stream;
 
-    public AudioReciever() {
+    public AudioReciever(String group, LiveStream stream) {
         try {
             this.group = group;
             ia = InetAddress.getByName(group);
+            this.stream = stream;
             running = true;
         }
         catch(Exception e) {
@@ -36,7 +38,7 @@ public class AudioReciever {
             dpacket = new DatagramPacket(buffer, buffer.length);
             msocket.receive(dpacket);
             data = dpacket.getData();
-            
+
             speakers.write(data,0,CHUNK_SIZE);
         }
         catch (Exception e) {

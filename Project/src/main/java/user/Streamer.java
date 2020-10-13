@@ -1,24 +1,30 @@
 package user;
 
+import stream.Category;
 import stream.LiveStream;
+import stream.LiveStreamSource;
 
 public class Streamer extends User {
-    private LiveStream myStream;
+    private LiveStreamSource myStream;
 
-    public Streamer(String username, String name, String bio, String dpLocation, Status status, LiveStream myStream) {
+    public Streamer(String username, String name, String bio, String dpLocation, Status status) {
         super(username, name, bio, dpLocation, status);
-        this.myStream = myStream;
     }
 
     public void stopStreaming() {
         //Handle stop streaming here
-        myStream.stopStream();
+
+        //Ask IDAssigner to free his id
+        myStream.stopStreaming();
         uToDB.removeStreamfromDB(this);
     }
 
-    public void startStreaming() {
+    public void startStreaming(String title, Category cat) {
         //Handle start streaming here
-        myStream.startStream();
+
+        //Ask IDAssigner for id
+        int id = 0;
+        myStream = new LiveStreamSource(title, cat, id);
         uToDB.addStreamtoDB(this);
     }
 
@@ -35,5 +41,4 @@ public class Streamer extends User {
         return (this.username + ": " + this.myStream.getTitle());
     }
 
-    //Above three functions are explicitly declared here instead of calling LiveStream functions directly so that other methods related to display can be called from here
 }

@@ -21,7 +21,7 @@ public class ImageReciever extends Thread {
 
     private boolean running;
 
-    public ImageReciever(String id) {
+    public ImageReciever(String id, LiveStream stream) {
         try {
             IP_ADDRESS = id;
             running = true;
