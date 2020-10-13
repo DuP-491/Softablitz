@@ -10,13 +10,6 @@ import java.util.Queue;
 
 import com.github.sarxos.webcam.Webcam;
 
-
-
-enum StreamMode {
-    WEBCAM,
-    SCREENCAP
-}
-
 public class LiveStream extends Thread {
     private BufferedImage currentFrame;
     private int viewCount;
@@ -104,6 +97,8 @@ public class LiveStream extends Thread {
     public String getTitle() {
         return this.title;
     }
+
+    public StreamMode getMode() { return this.mode; }
 
     public void run() {
         while(running) {
