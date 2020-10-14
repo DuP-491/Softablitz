@@ -19,6 +19,8 @@ public class LiveStreamSource extends LiveStream {
 
         Thread t = new Thread(imageSender); t.start();
         t = new Thread(audioSender); t.start();
+
+        startWatching();
     }
 
     public void setMode(int mode) {
