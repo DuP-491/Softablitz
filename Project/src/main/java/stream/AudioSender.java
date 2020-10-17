@@ -64,6 +64,7 @@ public class AudioSender extends Thread {
         }
         catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Sending me dikkat");
         }
         while(running) {
             captureAudio();

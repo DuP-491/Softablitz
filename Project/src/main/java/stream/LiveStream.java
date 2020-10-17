@@ -65,6 +65,8 @@ public class LiveStream extends Canvas implements Runnable {
         Thread t = new Thread(imageReciever); t.start(); //start recieveing images on new thread
         t = new Thread(audioReciever); t.start(); //start recieving audio on new thread
         t = new Thread(messageReciever); t.start(); // start recieving messages on new thread
+
+        running = true;
     }
 
     public void stopWatching() {
@@ -102,6 +104,7 @@ public class LiveStream extends Canvas implements Runnable {
 
     public StreamMode getMode() { return this.mode; }
 
+    @Override
     public void run() {
         int count = 0;
         j = new JFrame();
@@ -109,10 +112,12 @@ public class LiveStream extends Canvas implements Runnable {
         j.setSize(1000,800);
         j.setVisible(true);
         j.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        System.out.println(running);
         while(running) {
             count++;
             if(count == MESSAGE_REFRESH_INTERVAL) {
                 refreshMessages();
+                count = 0;
             }
             update();
         }
@@ -122,7 +127,6 @@ public class LiveStream extends Canvas implements Runnable {
         try {
             Graphics g = this.getGraphics();
             g.drawString(this + "",50,50);
-            //System.out.println(b);
             ImageIcon im = new ImageIcon(imageReciever.currentFrame);
             im.paintIcon(this, g, 50, 60);
         } catch (Exception e) {
