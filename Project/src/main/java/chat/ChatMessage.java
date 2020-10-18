@@ -3,6 +3,7 @@ package chat;
 import stream.LiveStream;
 import user.Viewer;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 enum Access {
@@ -10,7 +11,7 @@ enum Access {
     SUBONLY
 }
 
-public class ChatMessage {
+public class ChatMessage implements Serializable {
     private Viewer sender;
     private LiveStream streamSentOn;
     private String content;

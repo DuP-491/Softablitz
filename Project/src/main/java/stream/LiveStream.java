@@ -3,60 +3,83 @@ package stream;
 import chat.ChatMessage;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
-import java.util.Queue;
 
-import com.github.sarxos.webcam.Webcam;
+import chat.MessageReciever;
+import chat.MessageSender;
+import user.Streamer;
+
+import javax.swing.*;
 
 
+public class LiveStream extends Canvas implements Runnable {
+    protected int viewCount;
+    protected Streamer streamer;
+    protected LocalDateTime startedAtTime;
+    protected Category category;
+    protected String title;
+    protected StreamMode mode;
+    protected boolean running;
+    protected LinkedList<ChatMessage> allUsersMessageQueue;
+    protected LinkedList<ChatMessage> subOnlyMessageQueue;
 
-enum StreamMode {
-    WEBCAM,
-    SCREENCAP
-}
+    protected int ID;
 
-public class LiveStream extends Thread {
-    private BufferedImage currentFrame;
-    private int viewCount;
-    private LocalDateTime startedAtTime;
-    private Category category;
-    private String title;
-    private StreamMode mode;
-    private boolean running;
-    private LinkedList<ChatMessage> allUsersMessageQueue;
-    private LinkedList<ChatMessage> subOnlyMessageQueue;
+    protected ImageReciever imageReciever;
+    protected AudioReciever audioReciever;
+    protected MessageReciever messageReciever;
 
-    private int chatCapacity = 200;
+    protected MessageSender messageSender;
 
-    private Robot robot;
-    private Webcam webcam;
+    public static int MESSAGE_REFRESH_INTERVAL = 1000000;
 
-    public LiveStream(String title, Category cat) {
+    protected int chatCapacity = 200;
+
+    protected JFrame j;
+
+
+    public LiveStream(String title, Category cat, int id, Streamer streamer) {
+        this.ID = id;
+        this.streamer = streamer;
         this.startedAtTime = LocalDateTime.now();
         this.category = cat;
         this.title = title;
-        allUsersMessageQueue = new LinkedList<>();
-        subOnlyMessageQueue = new LinkedList<>();
-        try{
-            robot = new Robot();
-            webcam = Webcam.getDefault();
-        }
-        catch(Exception e) {}
+        allUsersMessageQueue = new LinkedList<ChatMessage>();
+        subOnlyMessageQueue = new LinkedList<ChatMessage>();
+
     }
 
-    public void stopStream() {
-        running = false;
-    }
+    //This will be called on the machine where we want to view
+    public void startWatching() {
+        String imageGroup = "225.4.6." + Integer.toString(ID);
+        String audioGroup = "225.4.6." + Integer.toString(ID+1);
+        String messageGroup = "225.4.6." + Integer.toString(ID+2);
 
-    public void startStream() {
+        imageReciever = new ImageReciever(imageGroup, this);
+        audioReciever = new AudioReciever(audioGroup, this);
+        messageReciever = new MessageReciever(messageGroup, this);
+
+        messageSender = new MessageSender(messageGroup, this);
+
+        Thread t = new Thread(imageReciever); t.start(); //start recieveing images on new thread
+        t = new Thread(audioReciever); t.start(); //start recieving audio on new thread
+        t = new Thread(messageReciever); t.start(); // start recieving messages on new thread
+
         running = true;
     }
 
-    public void setMode(int mode) {
-        if(mode == 1) { this.mode = StreamMode.WEBCAM; webcam.open(); }
-        else this.mode = StreamMode.SCREENCAP;
+    public void stopWatching() {
+        running = false;
+
+        imageReciever.stopThread();
+        imageReciever = null;
+
+        audioReciever.stopThread();
+        audioReciever = null;
+
+        messageReciever.stopThread();
+        messageReciever = null;
     }
 
     public void pushMessage(ChatMessage message) {
@@ -71,32 +94,6 @@ public class LiveStream extends Thread {
         }
     }
 
-    public void captureScreen() {
-        //Keep updating currentFrame by capturing screenshots
-        try {
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-            Rectangle screenRectangle = new Rectangle(screenSize);
-            this.currentFrame = robot.createScreenCapture(screenRectangle);
-
-        } catch (Exception E) {
-            System.out.println("Meme");
-        }
-    }
-
-    public void captureCam() {
-        //Keep updating currentFrame by capturing webcam photos
-        try {
-            this.currentFrame = webcam.getImage();
-        }
-        catch(Exception e) {
-            System.out.println("Meme");
-        }
-    }
-
-    public void sendFrametoServer() {
-        //keep sending updated frame to server
-    }
-
     public void refreshMessages() {
         //update both sub only and all user chat window
     }
@@ -105,13 +102,41 @@ public class LiveStream extends Thread {
         return this.title;
     }
 
+    public StreamMode getMode() { return this.mode; }
+
+    @Override
     public void run() {
+        int count = 0;
+        j = new JFrame();
+        j.add(this);
+        j.setSize(1000,800);
+        j.setVisible(true);
+        j.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        System.out.println(running);
         while(running) {
-            if (mode == StreamMode.SCREENCAP) this.captureScreen();
-            if (mode == StreamMode.WEBCAM) this.captureCam();
-            this.sendFrametoServer();
-            //At some interval, call this.refreshMessages()
+            count++;
+            if(count == MESSAGE_REFRESH_INTERVAL) {
+                refreshMessages();
+                count = 0;
+            }
+            update();
         }
     }
 
+    public void update() {
+        try {
+            Graphics g = this.getGraphics();
+            g.drawString(this + "",50,50);
+            ImageIcon im = new ImageIcon(imageReciever.currentFrame);
+            im.paintIcon(this, g, 50, 60);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public String toString() {
+        String ans = streamer.getUsername() + ": " + title + " in " + category;
+        return ans;
+    }
 }
