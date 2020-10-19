@@ -1,6 +1,7 @@
 package user;
 
 import chat.ChatMessage;
+import connections.ServerRequests;
 import stream.Category;
 import stream.LiveStream;
 
@@ -28,6 +29,10 @@ public class Viewer extends User {
         //get title, streamer and category from DB
         //get id from server
         try {
+            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+            dos.writeInt(ServerRequests.GETID.geti());
+            dos.close();
+
             DataInputStream dis = new DataInputStream(socket.getInputStream());
             id = dis.readInt();
             dis.close();

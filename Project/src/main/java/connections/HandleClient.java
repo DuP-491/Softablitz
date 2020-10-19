@@ -1,19 +1,23 @@
 package connections;
 
+import connections.db.DBHandler;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 
 public class HandleClient extends Thread {
     private IDAssigner assigner;
+    private DBHandler dbHandler;
     private Socket socket;
     private String username;
 
     private boolean running;
 
-    public HandleClient(Socket socket, IDAssigner assigner) {
+    public HandleClient(Socket socket, IDAssigner assigner, DBHandler dbHandler) {
         this.socket = socket;
         this.assigner = assigner;
+        this.dbHandler = dbHandler;
         running = true;
 
         try {

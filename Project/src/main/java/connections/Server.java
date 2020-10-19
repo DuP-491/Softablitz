@@ -1,14 +1,18 @@
 package connections;
 
+import connections.db.DBHandler;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server extends Thread {
     private IDAssigner assigner;
+    private DBHandler dbHandler;
 
     public Server() {
         assigner = new IDAssigner();
+        dbHandler = new DBHandler();
     }
 
     public void run() {
@@ -24,7 +28,7 @@ public class Server extends Thread {
         while (true) {
             try {
                 socket = serverSocket.accept();
-                Thread t = new Thread(new HandleClient(socket, this.assigner));
+                Thread t = new Thread(new HandleClient(socket, this.assigner, this.dbHandler));
                 t.start();
             } catch (IOException e) {
                 e.printStackTrace();

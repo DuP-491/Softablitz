@@ -21,15 +21,15 @@ public class DBHandler {
         }
     }
 
-    public Streamer[] getStreams(Category cat) {
+    public synchronized String[] getStreams(Category cat) {
         return null;
     }
 
-    public Streamer[] getNotifications() {
+    public synchronized String[] getNotifications() {
         return null;
     }
 
-    public User getUserByName(String searchTerm) {
+    public synchronized User getUserByUsername(String searchTerm) {
         try {
             String query = "Select * from Users where username=?";
             PreparedStatement ps = connection.prepareStatement(query);
@@ -60,11 +60,11 @@ public class DBHandler {
         return null;
     }
 
-    public User[] getSubList() {
+    public synchronized User[] getSubList() {
         return null;
     }
 
-    public User[] getFollowList(User self) {
+    public synchronized User[] getFollowList(User self) {
         User[] followList = new User[0];
         try {
             String query = "Select * from Follows where follower=?";
@@ -76,7 +76,7 @@ public class DBHandler {
             int index = 0;
             while(rs.next()) {
                 String streamerUsername = rs.getString("streamer");
-                User user = this.getUserByName(streamerUsername);
+                User user = this.getUserByUsername(streamerUsername);
                 followList[index++] = user;
             }
         }
@@ -86,11 +86,11 @@ public class DBHandler {
         return followList;
     }
 
-    public void addStreamtoDB(Streamer self) {
+    public synchronized void addStreamtoDB(Streamer self) {
 
     }
 
-    public void removeStreamfromDB(Streamer self) {
+    public synchronized void removeStreamfromDB(Streamer self) {
 
     }
 
