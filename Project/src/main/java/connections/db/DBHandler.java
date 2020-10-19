@@ -1,6 +1,7 @@
 package connections.db;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 
 import stream.Category;
 import user.Status;
@@ -21,12 +22,59 @@ public class DBHandler {
         }
     }
 
-    public synchronized String[] getStreams(Category cat) {
-        return null;
+    public synchronized String[] browseCategory(Category cat) {
+        String[] ans = null;
+        try {
+            int category = cat.geti();
+            String query = "Select * from streams where category=?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setInt(1, category);
+            ResultSet rs = ps.executeQuery();
+
+
+            int size = getSize(rs);
+            if(size==0) { return null; }
+
+            ans = new String[size];
+            int index = 0;
+            while(rs.next()) {
+                ans[index++] = rs.getString("streamerusername");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ans;
     }
 
-    public synchronized String[] getNotifications() {
-        return null;
+    public synchronized String[] getNotifications(String selfUsername) {
+        String[] ans = null;
+        try {
+            String query = "Select * from follows where followerusername=?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, selfUsername);
+            ResultSet rs = ps.executeQuery();
+
+
+            int size = getSize(rs);
+            if(size==0) { return null; }
+
+            ans = new String[size];
+            int index = 0;
+            while(rs.next()) {
+                //Check if followed streamer is live or not
+                String subquery = "Select * from streams where streamerusername=?";
+                PreparedStatement pss = connection.prepareStatement(subquery);
+                ps.setString(1, rs.getString("streamerusername"));
+                ResultSet rss = ps.executeQuery();
+
+                if(rss.next()) { ans[index++] = rss.getString("streamerusername"); }
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ans;
     }
 
     public synchronized User getUserByUsername(String searchTerm) {
@@ -86,12 +134,36 @@ public class DBHandler {
         return followList;
     }
 
-    public synchronized void addStreamtoDB(Streamer self) {
+    public synchronized void addStreamtoDB(String streamerUsername, String title, int category, Time starttime) {
+        try {
+            PreparedStatement pst = connection.prepareStatement("insert into streams (streamerusername, title, category, viewcount, starttime) values(?,?,?,?,?)");
 
+            pst.setString(1,streamerUsername);
+            pst.setString(2,title);
+            pst.setInt(3,category);
+            pst.setInt(4,0);
+            pst.setTime(5,starttime);
+
+            pst.executeUpdate();
+
+        }
+        catch(Exception e) {
+            e.printStackTrace();;
+        }
     }
 
-    public synchronized void removeStreamfromDB(Streamer self) {
+    public synchronized void removeStreamfromDB(String streamerUsername) {
+        try {
+            String query = "delete from streams where streamerusername=?";
+            PreparedStatement pst = connection.prepareStatement(query);
 
+            pst.setString(1,streamerUsername);
+
+            pst.execute();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     static int getSize(ResultSet rs) {
