@@ -31,6 +31,8 @@ public class Viewer extends User {
         try {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
             dos.writeInt(ServerRequests.GETID.geti());
+
+            dos.writeUTF(streamerUsername);
             dos.close();
 
             DataInputStream dis = new DataInputStream(socket.getInputStream());
