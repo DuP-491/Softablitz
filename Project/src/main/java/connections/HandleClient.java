@@ -33,7 +33,7 @@ public class HandleClient extends Thread {
                 int request = din.readInt();
                 din.close();
 
-                if(ServerRequests.GETID.compare(request)) { giveID(); }
+                if(ServerRequests.ASSIGNID.compare(request)) { assignID(); }
                 else if(ServerRequests.RETURNID.compare(request)) { returnID(); }
                 else if(ServerRequests.ENDCONNECTION.compare(request)) { endConnection(); }
 
@@ -44,8 +44,8 @@ public class HandleClient extends Thread {
         }
     }
 
-    public void giveID() {
-        int answer = assigner.getID(username);
+    public void assignID() {
+        int answer = assigner.assignID(username);
         DataOutputStream out;
         try {
             out = new DataOutputStream(socket.getOutputStream());
@@ -60,6 +60,20 @@ public class HandleClient extends Thread {
 
     public void returnID() {
         assigner.freeID(username);
+    }
+
+    public void getID(String streamerUsername) {
+        int answer = assigner.getID(streamerUsername);
+        DataOutputStream out;
+        try {
+            out = new DataOutputStream(socket.getOutputStream());
+            out.write(answer);
+            out.flush();
+            out.close();
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void endConnection() {

@@ -1,8 +1,12 @@
 package user;
 
+import connections.ServerRequests;
 import stream.Category;
 import stream.LiveStream;
 import stream.LiveStreamSource;
+
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 
 public class Streamer extends User {
     private LiveStreamSource myStream;
@@ -15,7 +19,16 @@ public class Streamer extends User {
         //Handle stop streaming here
 
         //Ask IDAssigner to free his id
+        try {
+            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+            dos.writeInt(ServerRequests.RETURNID.geti());
+            dos.flush(); dos.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         myStream.stopStreaming();
+        myStream = null;
         //uToDB.removeStreamfromDB(this);
     }
 
@@ -23,7 +36,19 @@ public class Streamer extends User {
         //Handle start streaming here
 
         //Ask IDAssigner for id
-        int id = 0;
+        int id = -1;
+        try {
+            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+            dos.writeInt(ServerRequests.ASSIGNID.geti());
+            dos.flush(); dos.close();
+
+            DataInputStream dis = new DataInputStream(socket.getInputStream());
+            id = dis.readInt();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
         myStream = new LiveStreamSource(title, cat, id, this);
         //uToDB.addStreamtoDB(this);
         myStream.startStreaming();
