@@ -7,10 +7,10 @@ import user.Status;
 import user.Streamer;
 import user.User;
 
-public class UserToDB {
+public class DBHandler {
     private Connection connection;
 
-    public UserToDB() {
+    public DBHandler() {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             String password = "password";
@@ -29,7 +29,7 @@ public class UserToDB {
         return null;
     }
 
-    public User getUserBySearchingHandle(String searchTerm) {
+    public User getUserByName(String searchTerm) {
         try {
             String query = "Select * from Users where username=?";
             PreparedStatement ps = connection.prepareStatement(query);
@@ -76,7 +76,7 @@ public class UserToDB {
             int index = 0;
             while(rs.next()) {
                 String streamerUsername = rs.getString("streamer");
-                User user = this.getUserBySearchingHandle(streamerUsername);
+                User user = this.getUserByName(streamerUsername);
                 followList[index++] = user;
             }
         }
@@ -87,7 +87,7 @@ public class UserToDB {
     }
 
     public void addStreamtoDB(Streamer self) {
-        
+
     }
 
     public void removeStreamfromDB(Streamer self) {
@@ -106,5 +106,4 @@ public class UserToDB {
         }
         return size;
     }
-
 }

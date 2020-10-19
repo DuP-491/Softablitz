@@ -1,8 +1,8 @@
 package user;
 
-import connections.db.UserToDB;
 
-
+import java.io.DataOutputStream;
+import java.net.Socket;
 
 public class User {
     protected String username;
@@ -10,7 +10,7 @@ public class User {
     protected String bio;
     protected String dpLocation;
     protected Status status;
-    protected UserToDB uToDB;
+    protected Socket socket;
 
     public User(String username, String name, String bio, String dpLocation, Status status) {
         this.username = username;
@@ -24,8 +24,18 @@ public class User {
         return this.username;
     }
 
-    public void startDBConnection() {
-        uToDB = new UserToDB();
+    public void startServerConnection() {
+        try {
+            socket = new Socket("localhost", 5436);
+            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+            out.writeUTF(username);
+            out.flush();
+            out.close();
+            //Starts the connection and send username to server
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

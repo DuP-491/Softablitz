@@ -16,7 +16,7 @@ public class Streamer extends User {
 
         //Ask IDAssigner to free his id
         myStream.stopStreaming();
-        uToDB.removeStreamfromDB(this);
+        //uToDB.removeStreamfromDB(this);
     }
 
     public void startStreaming(String title, Category cat) {
@@ -25,7 +25,7 @@ public class Streamer extends User {
         //Ask IDAssigner for id
         int id = 0;
         myStream = new LiveStreamSource(title, cat, id, this);
-        uToDB.addStreamtoDB(this);
+        //uToDB.addStreamtoDB(this);
         myStream.startStreaming();
     }
 

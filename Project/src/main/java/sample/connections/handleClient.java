@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
 
-public class HandleClient implements Runnable {
+public class handleClient implements Runnable {
     private Socket socket;
     ObjectInputStream objectInputStream;
 
-    public HandleClient(Socket socket) {
+    public handleClient(Socket socket) {
         this.socket = socket;
         try {
             objectInputStream = new ObjectInputStream(socket.getInputStream());

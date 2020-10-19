@@ -28,7 +28,7 @@ public class Viewer extends User {
 
     //Will be called when viewing follow list or getting notifications in home screen
     public void getFollowList() {
-        followList = uToDB.getFollowList(this);
+        //followList = uToDB.getFollowList(this);
         //query for follows in DB and update this.followList
     }
 
