@@ -24,10 +24,10 @@ public class Viewer extends User {
     public void startWatching(String streamerUsername) {
 
         try {
-            dos.writeInt(ServerRequests.GETSTREAM.geti()); dos.flush();
+            oos.writeInt(ServerRequests.GETSTREAM.geti()); oos.flush();
 
-            dos.writeUTF(streamerUsername);
-            dos.flush();
+            oos.writeUTF(streamerUsername);
+            oos.flush();
 
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             currentlyWatching = (LiveStream) ois.readObject();

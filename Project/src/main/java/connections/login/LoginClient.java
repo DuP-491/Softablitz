@@ -4,8 +4,6 @@ import connections.ServerRequests;
 import connections.db.LoginDB;
 import user.User;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;

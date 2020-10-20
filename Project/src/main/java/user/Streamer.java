@@ -5,9 +5,6 @@ import stream.Category;
 import stream.LiveStream;
 import stream.LiveStreamSource;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-
 public class Streamer extends User {
     private LiveStreamSource myStream;
 
@@ -20,11 +17,11 @@ public class Streamer extends User {
 
         //Ask IDAssigner to free his id
         try {
-            dos.writeInt(ServerRequests.RETURNID.geti());
-            dos.flush();
+            oos.writeInt(ServerRequests.RETURNID.geti());
+            oos.flush();
 
-            dos.writeInt(ServerRequests.REMOVESTREAMFROMDB.geti());
-            dos.flush();
+            oos.writeInt(ServerRequests.REMOVESTREAMFROMDB.geti());
+            oos.flush();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -39,10 +36,10 @@ public class Streamer extends User {
         //Ask IDAssigner for id
         int id = -1;
         try {
-            dos.writeInt(ServerRequests.ASSIGNID.geti());
-            dos.flush();
+            oos.writeInt(ServerRequests.ASSIGNID.geti());
+            oos.flush();
 
-            id = dis.readInt();
+            id = ois.readInt();
 
         }
         catch (Exception e) {
@@ -51,11 +48,11 @@ public class Streamer extends User {
         myStream = new LiveStreamSource(title, cat, id, this);
 
         try {
-            dos.writeInt(ServerRequests.ADDSTREAMTODB.geti());
-            dos.flush();
+            oos.writeInt(ServerRequests.ADDSTREAMTODB.geti());
+            oos.flush();
 
-            dos.writeUTF(title); dos.flush();
-            dos.writeInt(cat.geti()); dos.flush();
+            oos.writeUTF(title); oos.flush();
+            oos.writeInt(cat.geti()); oos.flush();
         }
         catch (Exception e) {
             e.printStackTrace();

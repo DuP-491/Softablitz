@@ -1,9 +1,7 @@
 package user;
 
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.net.Socket;
 
 public class User implements Serializable {
@@ -13,8 +11,8 @@ public class User implements Serializable {
     protected Status status;
     protected Socket socket;
 
-    protected DataOutputStream dos;
-    protected DataInputStream dis;
+    protected ObjectOutputStream oos;
+    protected ObjectInputStream ois;
 
     public User(String username, String name, String bio, Status status) {
         this.username = username;
@@ -37,11 +35,11 @@ public class User implements Serializable {
     public void startServerConnection() {
         try {
             socket = new Socket("localhost", 5436);
-            dos = new DataOutputStream(socket.getOutputStream());
-            dis = new DataInputStream(socket.getInputStream());
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
 
-            dos.writeUTF(username);
-            dos.flush();
+            oos.writeUTF(username);
+            oos.flush();
             //Starts the connection and send username to server
 
         }
