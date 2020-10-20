@@ -24,15 +24,13 @@ public class Viewer extends User {
     public void startWatching(String streamerUsername) {
 
         try {
-            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
             dos.writeInt(ServerRequests.GETSTREAM.geti()); dos.flush();
 
             dos.writeUTF(streamerUsername);
-            dos.flush(); dos.close();
+            dos.flush();
 
             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             currentlyWatching = (LiveStream) ois.readObject();
-            ois.close();
 
         }
         catch (Exception e) {

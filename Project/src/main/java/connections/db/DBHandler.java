@@ -17,12 +17,12 @@ public class DBHandler {
     public DBHandler(IDAssigner assigner) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            String password = "password";
-            this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/livestreamdb?characterEncoding=latin1&useConfigs=maxPerformance","this",password);
+            String password = "Bananasql1!";
+            this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/livestreamdb?characterEncoding=latin1&useConfigs=maxPerformance","root",password);
             this.assigner = assigner;
         }
         catch (Exception e) {
-            System.out.println("Meme");
+            e.printStackTrace();
         }
     }
 

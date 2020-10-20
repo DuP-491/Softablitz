@@ -16,6 +16,8 @@ public class HandleClient extends Thread {
     private DBHandler dbHandler;
     private Socket socket;
     private String username;
+    private DataInputStream dis;
+    private DataOutputStream dos;
 
     private boolean running;
 
@@ -26,9 +28,11 @@ public class HandleClient extends Thread {
         running = true;
 
         try {
-            DataInputStream din = new DataInputStream(socket.getInputStream());
-            username = din.readUTF();
-            din.close();
+            dos = new DataOutputStream(socket.getOutputStream());
+            dis = new DataInputStream(socket.getInputStream());
+
+            username = dis.readUTF();
+            dis.close();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -38,9 +42,8 @@ public class HandleClient extends Thread {
     public void run() {
         while(running) {
             try {
-                DataInputStream din = new DataInputStream(socket.getInputStream());
-                int request = din.readInt();
-                din.close();
+                int request = dis.readInt();
+                dis.close();
 
                 if(ServerRequests.ASSIGNID.compare(request)) { assignID(); }
                 else if(ServerRequests.RETURNID.compare(request)) { returnID(); }
@@ -58,12 +61,10 @@ public class HandleClient extends Thread {
     //Streamer method
     public void assignID() {
         int answer = assigner.assignID(username);
-        DataOutputStream out;
         try {
-            out = new DataOutputStream(socket.getOutputStream());
-            out.write(answer);
-            out.flush();
-            out.close();
+            dos.write(answer);
+            dos.flush();
+            dos.close();
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -83,7 +84,6 @@ public class HandleClient extends Thread {
             Date time = new Date(); //stores current time according to server
             java.sql.Timestamp starttime = new java.sql.Timestamp(time.getTime());
 
-            DataInputStream dis = new DataInputStream(socket.getInputStream());
             title = dis.readUTF();
             category = dis.readInt();
             dis.close();
@@ -108,14 +108,13 @@ public class HandleClient extends Thread {
     //Viewer method
     public void getStreamInfo() {
         try {
-            DataInputStream dis = new DataInputStream(socket.getInputStream());
             String streamerUsername = dis.readUTF();
             dis.close();
 
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             LiveStream livestream = dbHandler.getStream(streamerUsername);
             oos.writeObject(livestream);
-            oos.flush(); oos.close();
+            oos.flush();
         }
         catch(Exception e) {
             e.printStackTrace();

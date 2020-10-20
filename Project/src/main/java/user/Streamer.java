@@ -20,14 +20,11 @@ public class Streamer extends User {
 
         //Ask IDAssigner to free his id
         try {
-            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
             dos.writeInt(ServerRequests.RETURNID.geti());
             dos.flush();
 
             dos.writeInt(ServerRequests.REMOVESTREAMFROMDB.geti());
             dos.flush();
-
-            dos.close();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -42,11 +39,9 @@ public class Streamer extends User {
         //Ask IDAssigner for id
         int id = -1;
         try {
-            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
             dos.writeInt(ServerRequests.ASSIGNID.geti());
-            dos.flush(); dos.close();
+            dos.flush();
 
-            DataInputStream dis = new DataInputStream(socket.getInputStream());
             id = dis.readInt();
 
         }
@@ -56,14 +51,11 @@ public class Streamer extends User {
         myStream = new LiveStreamSource(title, cat, id, this);
 
         try {
-            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
             dos.writeInt(ServerRequests.ADDSTREAMTODB.geti());
             dos.flush();
 
             dos.writeUTF(title); dos.flush();
             dos.writeInt(cat.geti()); dos.flush();
-            dos.close();
-
         }
         catch (Exception e) {
             e.printStackTrace();

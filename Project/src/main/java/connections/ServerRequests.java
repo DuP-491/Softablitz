@@ -6,7 +6,8 @@ public enum ServerRequests {
     ENDCONNECTION(2),
     GETSTREAM(3),
     ADDSTREAMTODB(4),
-    REMOVESTREAMFROMDB(5);
+    REMOVESTREAMFROMDB(5),
+    REGISTERUSER(6);
 
     private int id;
 

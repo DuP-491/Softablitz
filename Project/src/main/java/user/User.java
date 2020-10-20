@@ -1,6 +1,7 @@
 package user;
 
 
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.Socket;
 
@@ -11,6 +12,9 @@ public class User {
     protected String dpLocation;
     protected Status status;
     protected Socket socket;
+
+    protected DataOutputStream dos;
+    protected DataInputStream dis;
 
     public User(String username, String name, String bio, String dpLocation, Status status) {
         this.username = username;
@@ -27,11 +31,14 @@ public class User {
     public void startServerConnection() {
         try {
             socket = new Socket("localhost", 5436);
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            out.writeUTF(username);
-            out.flush();
-            out.close();
+            dos = new DataOutputStream(socket.getOutputStream());
+            dis = new DataInputStream(socket.getInputStream());
+
+            dos.writeUTF(username);
+            dos.flush();
+            dos.close();
             //Starts the connection and send username to server
+
         }
         catch (Exception e) {
             e.printStackTrace();
