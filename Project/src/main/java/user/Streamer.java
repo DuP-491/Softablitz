@@ -11,8 +11,8 @@ import java.io.DataOutputStream;
 public class Streamer extends User {
     private LiveStreamSource myStream;
 
-    public Streamer(String username, String name, String bio, String dpLocation, Status status) {
-        super(username, name, bio, dpLocation, status);
+    public Streamer(String username, String name, String bio, Status status) {
+        super(username, name, bio, status);
     }
 
     public void stopStreaming() {

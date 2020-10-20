@@ -1,5 +1,6 @@
-package connections;
+package mainclasses;
 
+import connections.Server;
 import connections.login.LoginServer;
 
 public class ServerStarter {

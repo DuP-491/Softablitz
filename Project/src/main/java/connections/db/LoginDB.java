@@ -1,11 +1,10 @@
 package connections.db;
 
 import connections.IDAssigner;
+import user.Status;
+import user.User;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+import java.sql.*;
 
 public class LoginDB {
     private Connection connection;
@@ -51,5 +50,70 @@ public class LoginDB {
             e.printStackTrace();
         }
         return -1;
+    }
+
+    public synchronized User loginUser(String username, String password) {
+        try {
+            //Check if correct credentials
+            String query = "Select * from authentication where username=?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1,username);
+
+            ResultSet rs = ps.executeQuery();
+            if(!rs.next()) return null; //Already exists
+            if(!rs.getString("password").equals(password)) return null;
+
+            User self = getUserByUsername(username);
+            System.out.println("logindb done");
+            return self;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public synchronized User getUserByUsername(String searchTerm) {
+        try {
+            String query = "Select * from Users where username=?";
+            PreparedStatement ps = connection.prepareStatement(query);
+            ps.setString(1, searchTerm);
+            ResultSet rs = ps.executeQuery();
+            int size = getSize(rs);
+            if(size==0) { return null; }
+            else {
+                rs.next();
+                String name = rs.getString("name");
+                String bio = rs.getString("bio");
+                String dpLocation = rs.getString("dplocation");
+                int stat = rs.getInt("status");
+                Status status = Status.OFFLINE;
+                switch(stat) {
+                    case 0: status = Status.OFFLINE; break;
+                    case 1: status = Status.ONLINE; break;
+                    case 2: status = Status.WATCHING; break;
+                    case 3: status = Status.STREAMING; break;
+                    default: break;
+                }
+                return (new User(searchTerm,name,bio,status));
+            }
+        }
+        catch(SQLException e) {
+            System.out.println("Meme");
+        }
+        return null;
+    }
+
+    static int getSize(ResultSet rs) {
+        int size = 0;
+        try {
+            if (rs != null) {
+                rs.last();
+                size = rs.getRow();
+                rs.beforeFirst();
+            }
+        } catch (Exception e) {
+        }
+        return size;
     }
 }
