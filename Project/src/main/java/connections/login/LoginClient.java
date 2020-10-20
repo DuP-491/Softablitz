@@ -2,24 +2,27 @@ package connections.login;
 
 import connections.ServerRequests;
 import connections.db.LoginDB;
+import user.User;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
 
 public class LoginClient extends Thread {
     private Socket socket;
     private LoginDB ldb;
     private boolean running;
-    DataInputStream dis;
-    DataOutputStream dos;
+    private ObjectInputStream ois;
+    private ObjectOutputStream oos;
 
     public LoginClient(Socket socket, LoginDB ldb) {
         try {
             this.socket = socket;
             this.ldb = ldb;
-            dis = new DataInputStream(socket.getInputStream());
-            dos = new DataOutputStream(socket.getOutputStream());
+            oos = new ObjectOutputStream(socket.getOutputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
 
             running = true;
         }
@@ -32,10 +35,11 @@ public class LoginClient extends Thread {
         while(running) {
             try {
                 System.out.println("Waiting");
-                int request = dis.readInt();
+                int request = ois.readInt();
                 System.out.println(request);
 
                 if(ServerRequests.REGISTERUSER.compare(request)) { register(); }
+                else if(ServerRequests.LOGIN.compare(request)) { login(); }
                 else if(ServerRequests.ENDCONNECTION.compare(request)) { endConnection(); }
             }
             catch (Exception e) {
@@ -45,30 +49,37 @@ public class LoginClient extends Thread {
         }
     }
 
-    public int login() {//Unfinished
+    public void login() {//Unfinished
         try {
-            String username = dis.readUTF();
-            String password = dis.readUTF();
-            dis.close();
+            String username = ois.readUTF();
+            String password = ois.readUTF();
 
-            return 0;
+            User self = ldb.loginUser(username, password);
+            if(self==null) {
+                oos.writeInt(-1);
+                oos.flush();
+            }
+            else {
+                oos.writeInt(0);
+                oos.writeObject(self);
+                oos.flush();
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-        return 1;
     }
 
     public void register() {
         try {
-            String username = dis.readUTF();
-            String name = dis.readUTF();
-            String password = dis.readUTF();
+            String username = ois.readUTF();
+            String name = ois.readUTF();
+            String password = ois.readUTF();
 
             int result =  ldb.registerUser(username, name, password);
 
-            dos.writeInt(result);
-            dos.flush();
+            oos.writeInt(result);
+            oos.flush();
 
         }
         catch (Exception e) {

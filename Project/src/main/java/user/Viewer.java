@@ -16,8 +16,8 @@ public class Viewer extends User {
     private User[] subList;
     private User[] followList;
 
-    public Viewer(String username, String name, String bio, String dpLocation, Status status) {
-        super(username, name, bio, dpLocation, status);
+    public Viewer(String username, String name, String bio, Status status) {
+        super(username, name, bio, status);
     }
 
     //Called whenever viewer starts watching anyone, or changes to someone else

@@ -3,30 +3,36 @@ package user;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.Serializable;
 import java.net.Socket;
 
-public class User {
+public class User implements Serializable {
     protected String username;
     protected String name;
     protected String bio;
-    protected String dpLocation;
     protected Status status;
     protected Socket socket;
 
     protected DataOutputStream dos;
     protected DataInputStream dis;
 
-    public User(String username, String name, String bio, String dpLocation, Status status) {
+    public User(String username, String name, String bio, Status status) {
         this.username = username;
         this.name = name;
         this.bio = bio;
-        this.dpLocation = dpLocation;
         this.status = status;
     }
 
     public String getUsername() {
         return this.username;
     }
+    public String getName() {
+        return this.name;
+    }
+    public String getBio() {
+        return this.bio;
+    }
+    public Status getStatus() { return this.status; }
 
     public void startServerConnection() {
         try {

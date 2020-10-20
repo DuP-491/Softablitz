@@ -2,17 +2,16 @@
  * Created by JFormDesigner on Tue Oct 20 12:27:32 IST 2020
  */
 
-package connections.login;
+package mainclasses;
 
 import java.awt.event.*;
 import javax.swing.*;
 
 import connections.ServerRequests;
 import net.miginfocom.swing.*;
+import user.User;
 
-import java.io.DataInputStream;
-import java.io.DataOutput;
-import java.io.DataOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 /**
@@ -20,16 +19,16 @@ import java.net.Socket;
  */
 public class LoginRegister extends JPanel {
     private Socket socket;
-    private DataOutputStream dos;
-    private DataInputStream dis;
+    private ObjectInputStream ois;
+    private ObjectOutputStream oos;
 
     public LoginRegister() {
         try {
             socket = new Socket("localhost", 5434); //LoginServer
             initComponents();
             System.out.print("Form started");
-            dos = new DataOutputStream(socket.getOutputStream());
-            dis = new DataInputStream(socket.getInputStream());
+            ois = new ObjectInputStream(socket.getInputStream());
+            oos = new ObjectOutputStream(socket.getOutputStream());
 
         }
         catch (Exception ee) {
@@ -39,24 +38,44 @@ public class LoginRegister extends JPanel {
 
     private void loginPressed(ActionEvent e) {
         // TODO add your code here
+        try {
+            oos.writeInt(ServerRequests.LOGIN.geti());
+            oos.writeUTF(textField1.getText()); //write username
+            oos.flush();
+            oos.writeUTF(textField2.getText()); //write password
+            oos.flush();
 
+            int result = ois.readInt();
+            if(result == -1) {
+                textArea1.append("Login failed\n");
+            }
+            else {
+                User self = (User) ois.readObject();
+                textArea1.append("Login successful\n");
+                Thread t = new Thread(new HomeMain(self));
+                t.start();
+            }
+        }
+        catch(Exception ee) {
+            ee.printStackTrace();
+        }
     }
 
     private void registerPressed(ActionEvent e) {
         // TODO add your code here
         try {
-            dos.writeInt(ServerRequests.REGISTERUSER.geti());
-            dos.flush();
+            oos.writeInt(ServerRequests.REGISTERUSER.geti());
+            oos.flush();
             System.out.println(ServerRequests.REGISTERUSER.geti());
 
-            dos.writeUTF(textField3.getText()); // write username
-            dos.flush();
-            dos.writeUTF(textField4.getText()); // write name
-            dos.flush();
-            dos.writeUTF(textField5.getText()); // write password
-            dos.flush();
+            oos.writeUTF(textField3.getText()); // write username
+            oos.flush();
+            oos.writeUTF(textField4.getText()); // write name
+            oos.flush();
+            oos.writeUTF(textField5.getText()); // write password
+            oos.flush();
 
-            int result = dis.readInt();
+            int result = ois.readInt();
 
             if(result == -1) { textArea1.append("Register failed\n"); }
             else { textArea1.append("Register succesfull. You can log in now\n"); }
@@ -88,13 +107,13 @@ public class LoginRegister extends JPanel {
         textArea1 = new JTextArea();
 
         //======== this ========
-        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing
-        . border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder
-        . CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .
-        awt . Font. BOLD ,12 ) ,java . awt. Color .red ) , getBorder () ) )
-        ;  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
-        ) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } )
-        ;
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax.
+        swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border
+        . TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog"
+        ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder
+        ( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java
+        .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException
+        ( ); }} );
         setLayout(new MigLayout(
             "hidemode 3",
             // columns

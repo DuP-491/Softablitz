@@ -103,7 +103,7 @@ public class DBHandler {
                     case 3: status = Status.STREAMING; break;
                     default: break;
                 }
-                return (new User(searchTerm,name,bio,dpLocation,status));
+                return (new User(searchTerm,name,bio,status));
             }
         }
         catch(SQLException e) {
