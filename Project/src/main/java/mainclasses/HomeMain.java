@@ -12,15 +12,17 @@ public class HomeMain extends Thread {
 
     public HomeMain(User user) {
         selfViewer = new Viewer(user.getUsername(),user.getName(),user.getBio(),user.getStatus());
+        selfViewer.startServerConnection();
         selfStreamer = new Streamer(user.getUsername(),user.getName(),user.getBio(),user.getStatus());
+
     }
 
     public void run() {
         JFrame frame = new JFrame();
-        frame.add(new HomePage());
+        frame.add(new HomePage(selfViewer, selfStreamer));
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        frame.setSize(640,480);
+        frame.setSize(800,600);
         frame.setTitle("Revenge Live: HomePage for " + selfViewer.getUsername());
     }
 }

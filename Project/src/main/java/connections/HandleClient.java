@@ -1,6 +1,7 @@
 package connections;
 
 import connections.db.DBHandler;
+import stream.Category;
 import stream.LiveStream;
 
 import java.io.DataInput;
@@ -41,6 +42,7 @@ public class HandleClient extends Thread {
         while(running) {
             try {
                 int request = ois.readInt();
+                System.out.println(request);
 
                 if(ServerRequests.ASSIGNID.compare(request)) { assignID(); }
                 else if(ServerRequests.RETURNID.compare(request)) { returnID(); }
@@ -48,10 +50,27 @@ public class HandleClient extends Thread {
                 else if(ServerRequests.GETSTREAM.compare(request)) { getStreamInfo(); }
                 else if(ServerRequests.ADDSTREAMTODB.compare(request)) { addStreamTODB(); }
                 else if(ServerRequests.REMOVESTREAMFROMDB.compare(request)) { removeStreamfromDB(); }
+                else if(ServerRequests.BROWSECATEGORY.compare(request)) { getStreamsByCategory(); }
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    //Viewer method
+    public void getStreamsByCategory() {
+        try {
+            int catno = ois.readInt();
+            Category cat = Category.IRL;
+            for(Category i : Category.values()) { if(i.compare(catno)) { cat = i; break; } }
+
+            String ans[] = dbHandler.browseCategory(cat);
+            oos.writeObject(ans);
+            oos.flush();
+        }
+        catch (Exception e) {
+
         }
     }
 

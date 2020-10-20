@@ -32,8 +32,8 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 6"
 			} )
-			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "textField2"
+			add( new FormComponent( "javax.swing.JPasswordField" ) {
+				name: "passwordField1"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 6 6 5 1"
 			} )
@@ -78,8 +78,8 @@ new FormModel {
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 4 14"
 			} )
-			add( new FormComponent( "javax.swing.JTextField" ) {
-				name: "textField5"
+			add( new FormComponent( "javax.swing.JPasswordField" ) {
+				name: "passwordField2"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 6 14 7 1"
 			} )

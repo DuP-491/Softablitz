@@ -26,6 +26,9 @@ public class LoginRegister extends JPanel {
         try {
             socket = new Socket("localhost", 5434); //LoginServer
             initComponents();
+            //Edit all jpanel components here
+            textArea1.setEditable(false);
+
             System.out.print("Form started");
             ois = new ObjectInputStream(socket.getInputStream());
             oos = new ObjectOutputStream(socket.getOutputStream());
@@ -42,7 +45,7 @@ public class LoginRegister extends JPanel {
             oos.writeInt(ServerRequests.LOGIN.geti());
             oos.writeUTF(textField1.getText()); //write username
             oos.flush();
-            oos.writeUTF(textField2.getText()); //write password
+            oos.writeUTF(String.valueOf(passwordField1.getPassword())); //write password
             oos.flush();
 
             int result = ois.readInt();
@@ -66,13 +69,12 @@ public class LoginRegister extends JPanel {
         try {
             oos.writeInt(ServerRequests.REGISTERUSER.geti());
             oos.flush();
-            System.out.println(ServerRequests.REGISTERUSER.geti());
 
             oos.writeUTF(textField3.getText()); // write username
             oos.flush();
             oos.writeUTF(textField4.getText()); // write name
             oos.flush();
-            oos.writeUTF(textField5.getText()); // write password
+            oos.writeUTF(String.valueOf(passwordField2.getPassword())); // write password
             oos.flush();
 
             int result = ois.readInt();
@@ -92,7 +94,7 @@ public class LoginRegister extends JPanel {
         label2 = new JLabel();
         textField1 = new JTextField();
         label3 = new JLabel();
-        textField2 = new JTextField();
+        passwordField1 = new JPasswordField();
         button1 = new JButton();
         label4 = new JLabel();
         label5 = new JLabel();
@@ -100,20 +102,21 @@ public class LoginRegister extends JPanel {
         label6 = new JLabel();
         textField4 = new JTextField();
         label7 = new JLabel();
-        textField5 = new JTextField();
+        passwordField2 = new JPasswordField();
         button2 = new JButton();
         label8 = new JLabel();
         scrollPane1 = new JScrollPane();
         textArea1 = new JTextArea();
 
         //======== this ========
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax.
-        swing. border. EmptyBorder( 0, 0, 0, 0) , "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn", javax. swing. border
-        . TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog"
-        ,java .awt .Font .BOLD ,12 ), java. awt. Color. red) , getBorder
-        ( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override public void propertyChange (java
-        .beans .PropertyChangeEvent e) {if ("\u0062ord\u0065r" .equals (e .getPropertyName () )) throw new RuntimeException
-        ( ); }} );
+        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(
+        new javax.swing.border.EmptyBorder(0,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e"
+        ,javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM
+        ,new java.awt.Font("D\u0069al\u006fg",java.awt.Font.BOLD,12)
+        ,java.awt.Color.red), getBorder())); addPropertyChangeListener(
+        new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
+        ){if("\u0062or\u0064er".equals(e.getPropertyName()))throw new RuntimeException()
+        ;}});
         setLayout(new MigLayout(
             "hidemode 3",
             // columns
@@ -166,7 +169,7 @@ public class LoginRegister extends JPanel {
         //---- label3 ----
         label3.setText("Password");
         add(label3, "cell 4 6");
-        add(textField2, "cell 6 6 5 1");
+        add(passwordField1, "cell 6 6 5 1");
 
         //---- button1 ----
         button1.setText("Log In");
@@ -190,7 +193,7 @@ public class LoginRegister extends JPanel {
         //---- label7 ----
         label7.setText("Password");
         add(label7, "cell 4 14");
-        add(textField5, "cell 6 14 7 1");
+        add(passwordField2, "cell 6 14 7 1");
 
         //---- button2 ----
         button2.setText("Register");
@@ -215,7 +218,7 @@ public class LoginRegister extends JPanel {
     private JLabel label2;
     private JTextField textField1;
     private JLabel label3;
-    private JTextField textField2;
+    private JPasswordField passwordField1;
     private JButton button1;
     private JLabel label4;
     private JLabel label5;
@@ -223,7 +226,7 @@ public class LoginRegister extends JPanel {
     private JLabel label6;
     private JTextField textField4;
     private JLabel label7;
-    private JTextField textField5;
+    private JPasswordField passwordField2;
     private JButton button2;
     private JLabel label8;
     private JScrollPane scrollPane1;

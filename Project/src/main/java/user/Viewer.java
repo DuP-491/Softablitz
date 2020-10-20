@@ -20,6 +20,23 @@ public class Viewer extends User {
         super(username, name, bio, status);
     }
 
+    public String[] getStreamsByCategory(Category cat) {
+        try {
+            oos.writeInt(ServerRequests.BROWSECATEGORY.geti());
+            oos.flush();
+
+            oos.writeInt(cat.geti());
+            oos.flush();
+
+            String streams[] = (String[]) ois.readObject();
+            return streams;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     //Called whenever viewer starts watching anyone, or changes to someone else
     public void startWatching(String streamerUsername) {
 
@@ -29,7 +46,6 @@ public class Viewer extends User {
             oos.writeUTF(streamerUsername);
             oos.flush();
 
-            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
             currentlyWatching = (LiveStream) ois.readObject();
 
         }

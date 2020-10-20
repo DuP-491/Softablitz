@@ -4,15 +4,50 @@
 
 package mainclasses;
 
+import java.awt.event.*;
 import javax.swing.*;
 import net.miginfocom.swing.*;
+import stream.Category;
+import user.Streamer;
+import user.Viewer;
+
+import java.awt.*;
+import java.net.Socket;
 
 /**
  * @author Diptarag Ray Chaudhuri
  */
 public class HomePage extends JPanel {
-    public HomePage() {
+    private Viewer viewer;
+    private Streamer streamer;
+
+    public HomePage(Viewer viewer, Streamer streamer) {
         initComponents();
+        //Edit all jpanel componenents here
+        for(Category i : Category.values()) {
+            comboBox1.addItem(i);
+        }
+        this.viewer = viewer;
+        this.streamer = streamer;
+        textArea1.setEditable(false);
+    }
+
+    private void browsePressed(ActionEvent e) {
+        // TODO add your code here
+        Category cat = (Category) comboBox1.getSelectedItem();
+        String text = "Live streamers in " + cat + " are: \n";
+
+        try {
+            String streams[] = viewer.getStreamsByCategory(cat);
+            for (int i = 0; i < streams.length; i++) {
+                text += streams[i] + "\n";
+            }
+        }
+        catch (NullPointerException ee) {
+            ;
+        }
+
+        textArea2.setText(text);
     }
 
     private void initComponents() {
@@ -27,14 +62,23 @@ public class HomePage extends JPanel {
         label3 = new JLabel();
         comboBox1 = new JComboBox();
         button2 = new JButton();
+        label4 = new JLabel();
+        scrollPane2 = new JScrollPane();
+        textArea2 = new JTextArea();
+        label5 = new JLabel();
+        textField2 = new JTextField();
+        button3 = new JButton();
+        label6 = new JLabel();
+        button4 = new JButton();
 
         //======== this ========
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border.
-        EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing. border. TitledBorder. CENTER, javax. swing
-        . border. TitledBorder. BOTTOM, new java .awt .Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ),
-        java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( )
-        { @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName () ))
-        throw new RuntimeException( ); }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
+        . swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing
+        . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
+        Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
+        ) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
+        public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName (
+        ) )) throw new RuntimeException( ); }} );
         setLayout(new MigLayout(
             "hidemode 3",
             // columns
@@ -48,6 +92,15 @@ public class HomePage extends JPanel {
             "[fill]" +
             "[fill]",
             // rows
+            "[]" +
+            "[]" +
+            "[]" +
+            "[]" +
+            "[]" +
+            "[]" +
+            "[]" +
+            "[]" +
+            "[]" +
             "[]" +
             "[]" +
             "[]" +
@@ -78,14 +131,44 @@ public class HomePage extends JPanel {
 
         //---- label3 ----
         label3.setText("Browse Category");
-        add(label3, "cell 1 6");
+        add(label3, "cell 1 6 2 1");
         add(comboBox1, "cell 2 6 4 1");
 
         //---- button2 ----
         button2.setText("Browse");
+        button2.addActionListener(e -> browsePressed(e));
         add(button2, "cell 6 6");
+
+        //---- label4 ----
+        label4.setText("Browse Results");
+        add(label4, "cell 1 8");
+
+        //======== scrollPane2 ========
+        {
+            scrollPane2.setViewportView(textArea2);
+        }
+        add(scrollPane2, "cell 1 9 2 1,width 400:400:400,height 200:200:200");
+
+        //---- label5 ----
+        label5.setText("Start watching streamer by Handle");
+        add(label5, "cell 1 14");
+        add(textField2, "cell 2 14 4 1");
+
+        //---- button3 ----
+        button3.setText("Start Watching");
+        add(button3, "cell 6 14");
+
+        //---- label6 ----
+        label6.setText("OR");
+        add(label6, "cell 1 16");
+
+        //---- button4 ----
+        button4.setText("Start Streaming");
+        add(button4, "cell 2 16");
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }
+    
+    
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - Diptarag Ray Chaudhuri
@@ -98,5 +181,13 @@ public class HomePage extends JPanel {
     private JLabel label3;
     private JComboBox comboBox1;
     private JButton button2;
+    private JLabel label4;
+    private JScrollPane scrollPane2;
+    private JTextArea textArea2;
+    private JLabel label5;
+    private JTextField textField2;
+    private JButton button3;
+    private JLabel label6;
+    private JButton button4;
     // JFormDesigner - End of variables declaration  //GEN-END:variables
 }
