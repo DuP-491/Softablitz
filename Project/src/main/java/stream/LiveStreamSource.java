@@ -10,6 +10,7 @@ public class LiveStreamSource extends LiveStream {
     public LiveStreamSource(String title, Category cat, int id, Streamer streamer) {
         super(title, cat, id, streamer.getUsername());
         this.streamer = streamer;
+        mode = StreamMode.WEBCAM;
     }
 
     public void startStreaming() {

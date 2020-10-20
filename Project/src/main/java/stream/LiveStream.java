@@ -43,7 +43,6 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
     public LiveStream(String title, Category cat, int id, String streamerUsername) {
         this.ID = id;
         this.streamerUsername = streamerUsername;
-        this.startedAtTime = LocalDateTime.now();
         this.category = cat;
         this.title = title;
         allUsersMessageQueue = new LinkedList<ChatMessage>();
@@ -116,7 +115,7 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
         j.add(this);
         j.setSize(1000,800);
         j.setVisible(true);
-        j.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+        j.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         System.out.println(running);
         while(running) {
             count++;
@@ -135,7 +134,7 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
             ImageIcon im = new ImageIcon(imageReciever.currentFrame);
             im.paintIcon(this, g, 50, 60);
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Cant get currentframe");
         }
     }
 

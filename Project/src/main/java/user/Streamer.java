@@ -36,6 +36,7 @@ public class Streamer extends User {
         //Ask IDAssigner for id
         int id = -1;
         try {
+
             oos.writeInt(ServerRequests.ASSIGNID.geti());
             oos.flush();
 
@@ -44,21 +45,25 @@ public class Streamer extends User {
         }
         catch (Exception e) {
             e.printStackTrace();
+            System.out.println("id meme");
         }
         myStream = new LiveStreamSource(title, cat, id, this);
 
         try {
-            oos.writeInt(ServerRequests.ADDSTREAMTODB.geti());
+            /*oos.writeInt(ServerRequests.ADDSTREAMTODB.geti()); //for later
             oos.flush();
 
             oos.writeUTF(title); oos.flush();
-            oos.writeInt(cat.geti()); oos.flush();
+            oos.writeInt(cat.geti()); oos.flush();*/
         }
         catch (Exception e) {
             e.printStackTrace();
+            System.out.println("add stream to db meme");
         }
 
         myStream.startStreaming();
+        Thread t = new Thread(myStream);
+        t.start();
     }
 
     public void setMode(int mode) {

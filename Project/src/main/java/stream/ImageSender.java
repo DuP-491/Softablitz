@@ -44,7 +44,7 @@ public class ImageSender extends Thread {
             robot = new Robot();
             running = true;
         } catch (Exception e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
     }
 
@@ -86,7 +86,7 @@ public class ImageSender extends Thread {
         try {
             ia = InetAddress.getByName(multicastAddress);
         } catch (UnknownHostException e) {
-            e.printStackTrace();
+            System.out.println("image sending ip fucked");
             return ret;
         }
 
@@ -100,7 +100,7 @@ public class ImageSender extends Thread {
             ms.send(dp);
             ret = true;
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Image sending fucked 1");
             ret = false;
         } finally {
             if (ms != null) {
@@ -157,7 +157,7 @@ public class ImageSender extends Thread {
                 sessionNumber = sessionNumber < MAX_SESSION_NUMBER ? ++sessionNumber : 0;
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Image sending fucked 2");
         }
     }
 
@@ -178,7 +178,7 @@ public class ImageSender extends Thread {
             this.currentFrame = robot.createScreenCapture(screenRectangle);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("CApture screen fucked");
         }
     }
 

@@ -14,6 +14,7 @@ public class HomeMain extends Thread {
         selfViewer = new Viewer(user.getUsername(),user.getName(),user.getBio(),user.getStatus());
         selfViewer.startServerConnection();
         selfStreamer = new Streamer(user.getUsername(),user.getName(),user.getBio(),user.getStatus());
+        selfStreamer.startServerConnection();
 
     }
 

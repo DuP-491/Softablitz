@@ -26,7 +26,7 @@ public class ImageReciever extends Thread {
             IP_ADDRESS = id;
             running = true;
         }catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -101,7 +101,8 @@ public class ImageReciever extends Thread {
 
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("currentFrame fucked");
+
         } finally {
             if (ms != null) {
                 try {

@@ -28,7 +28,7 @@ public class AudioReciever extends Thread {
             running = true;
         }
         catch(Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -40,14 +40,14 @@ public class AudioReciever extends Thread {
             data = dpacket.getData();
         }
         catch(Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             System.out.println("Recieving 1 me dikkat");
         }
         try {
             speakers.write(data,0,CHUNK_SIZE);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             System.out.println("Recieving 2 me dikkat");
         }
     }
@@ -68,7 +68,7 @@ public class AudioReciever extends Thread {
             msocket.joinGroup(ia);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             System.out.println("Recieving start me dikkat");
         }
         while(running) {

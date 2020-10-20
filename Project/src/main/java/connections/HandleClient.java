@@ -78,7 +78,7 @@ public class HandleClient extends Thread {
     public void assignID() {
         int answer = assigner.assignID(username);
         try {
-            oos.write(answer);
+            oos.writeInt(answer);
             oos.flush();
         }
         catch(Exception e) {

@@ -8,6 +8,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import net.miginfocom.swing.*;
 import stream.Category;
+import stream.PreStream;
 import user.Streamer;
 import user.Viewer;
 
@@ -50,6 +51,21 @@ public class HomePage extends JPanel {
         textArea2.setText(text);
     }
 
+    private void startWatchingPressed(ActionEvent e) {
+        // TODO add your code here
+        String streamerUsername = textField2.getText();
+        viewer.startWatching(streamerUsername);
+
+    }
+
+    private void startStreamingPressed(ActionEvent e) {
+        // TODO add your code here
+        PreStream prestream = new PreStream(streamer);
+        prestream.setVisible(true);
+        prestream.setSize(640,480);
+        prestream.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Diptarag Ray Chaudhuri
@@ -72,13 +88,12 @@ public class HomePage extends JPanel {
         button4 = new JButton();
 
         //======== this ========
-        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax
-        . swing. border. EmptyBorder( 0, 0, 0, 0) , "JFor\u006dDesi\u0067ner \u0045valu\u0061tion", javax. swing
-        . border. TitledBorder. CENTER, javax. swing. border. TitledBorder. BOTTOM, new java .awt .
-        Font ("Dia\u006cog" ,java .awt .Font .BOLD ,12 ), java. awt. Color. red
-        ) , getBorder( )) );  addPropertyChangeListener (new java. beans. PropertyChangeListener( ){ @Override
-        public void propertyChange (java .beans .PropertyChangeEvent e) {if ("bord\u0065r" .equals (e .getPropertyName (
-        ) )) throw new RuntimeException( ); }} );
+        setBorder (new javax. swing. border. CompoundBorder( new javax .swing .border .TitledBorder (new javax. swing. border
+        . EmptyBorder( 0, 0, 0, 0) , "JF\u006frmDes\u0069gner \u0045valua\u0074ion", javax. swing. border. TitledBorder. CENTER, javax
+        . swing. border. TitledBorder. BOTTOM, new java .awt .Font ("D\u0069alog" ,java .awt .Font .BOLD ,
+        12 ), java. awt. Color. red) , getBorder( )) );  addPropertyChangeListener (new java. beans
+        . PropertyChangeListener( ){ @Override public void propertyChange (java .beans .PropertyChangeEvent e) {if ("\u0062order" .equals (e .
+        getPropertyName () )) throw new RuntimeException( ); }} );
         setLayout(new MigLayout(
             "hidemode 3",
             // columns
@@ -156,6 +171,7 @@ public class HomePage extends JPanel {
 
         //---- button3 ----
         button3.setText("Start Watching");
+        button3.addActionListener(e -> startWatchingPressed(e));
         add(button3, "cell 6 14");
 
         //---- label6 ----
@@ -164,6 +180,7 @@ public class HomePage extends JPanel {
 
         //---- button4 ----
         button4.setText("Start Streaming");
+        button4.addActionListener(e -> startStreamingPressed(e));
         add(button4, "cell 2 16");
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
     }

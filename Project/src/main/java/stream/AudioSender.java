@@ -28,7 +28,7 @@ public class AudioSender extends Thread {
             running = true;
         }
         catch(Exception e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
     }
 
@@ -44,7 +44,7 @@ public class AudioSender extends Thread {
             msocket.send(dpacket);
         }
         catch (Exception e) {
-            e.printStackTrace();
+           // e.printStackTrace();
         }
     }
 
@@ -63,7 +63,7 @@ public class AudioSender extends Thread {
             data = new byte[microphone.getBufferSize() / 5];
         }
         catch (Exception e) {
-            e.printStackTrace();
+            //e.printStackTrace();
             System.out.println("Sending me dikkat");
         }
         while(running) {

@@ -5,11 +5,6 @@ import connections.ServerRequests;
 import stream.Category;
 import stream.LiveStream;
 
-import javax.xml.crypto.Data;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
-import java.io.ObjectInputStream;
-import java.time.LocalDateTime;
 
 public class Viewer extends User {
     private LiveStream currentlyWatching;

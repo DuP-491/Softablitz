@@ -45,7 +45,7 @@ public class MessageReciever extends Thread {
             stream.pushMessage(message);
         }
         catch (Exception e) {
-            e.printStackTrace();
+            //System.out.println("Message recieve memes");
         }
     }
 
