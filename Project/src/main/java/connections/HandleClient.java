@@ -32,7 +32,6 @@ public class HandleClient extends Thread {
             dis = new DataInputStream(socket.getInputStream());
 
             username = dis.readUTF();
-            dis.close();
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -43,7 +42,6 @@ public class HandleClient extends Thread {
         while(running) {
             try {
                 int request = dis.readInt();
-                dis.close();
 
                 if(ServerRequests.ASSIGNID.compare(request)) { assignID(); }
                 else if(ServerRequests.RETURNID.compare(request)) { returnID(); }
@@ -64,7 +62,6 @@ public class HandleClient extends Thread {
         try {
             dos.write(answer);
             dos.flush();
-            dos.close();
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -86,7 +83,6 @@ public class HandleClient extends Thread {
 
             title = dis.readUTF();
             category = dis.readInt();
-            dis.close();
 
             dbHandler.addStreamtoDB(username, title, category, starttime);
         }
@@ -109,7 +105,6 @@ public class HandleClient extends Thread {
     public void getStreamInfo() {
         try {
             String streamerUsername = dis.readUTF();
-            dis.close();
 
             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             LiveStream livestream = dbHandler.getStream(streamerUsername);

@@ -36,7 +36,6 @@ public class User {
 
             dos.writeUTF(username);
             dos.flush();
-            dos.close();
             //Starts the connection and send username to server
 
         }
