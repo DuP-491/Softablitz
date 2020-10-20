@@ -1,11 +1,15 @@
 package connections;
 
 import connections.db.DBHandler;
+import stream.LiveStream;
 
 import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.sql.Time;
+import java.util.Date;
 
 public class HandleClient extends Thread {
     private IDAssigner assigner;
@@ -41,8 +45,9 @@ public class HandleClient extends Thread {
                 if(ServerRequests.ASSIGNID.compare(request)) { assignID(); }
                 else if(ServerRequests.RETURNID.compare(request)) { returnID(); }
                 else if(ServerRequests.ENDCONNECTION.compare(request)) { endConnection(); }
-                else if(ServerRequests.GETID.compare(request)) { getID(); }
-
+                else if(ServerRequests.GETSTREAM.compare(request)) { getStreamInfo(); }
+                else if(ServerRequests.ADDSTREAMTODB.compare(request)) { addStreamTODB(); }
+                else if(ServerRequests.REMOVESTREAMFROMDB.compare(request)) { removeStreamfromDB(); }
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -50,6 +55,7 @@ public class HandleClient extends Thread {
         }
     }
 
+    //Streamer method
     public void assignID() {
         int answer = assigner.assignID(username);
         DataOutputStream out;
@@ -64,31 +70,59 @@ public class HandleClient extends Thread {
         }
     }
 
+    //Streamer method
     public void returnID() {
         assigner.freeID(username);
     }
 
-    public void getID() {
-        String streamerUsername = null;
+    //Streamer method
+    public void addStreamTODB() {
         try {
+            String title = null;
+            int category;
+            Date time = new Date(); //stores current time according to server
+            java.sql.Timestamp starttime = new java.sql.Timestamp(time.getTime());
+
             DataInputStream dis = new DataInputStream(socket.getInputStream());
-            streamerUsername = dis.readUTF();
+            title = dis.readUTF();
+            category = dis.readInt();
             dis.close();
 
-            int answer = assigner.getID(streamerUsername);
+            dbHandler.addStreamtoDB(username, title, category, starttime);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
-            DataOutputStream out;
-            out = new DataOutputStream(socket.getOutputStream());
-            out.write(answer);
-            out.flush();
-            out.close();
+    //Streamer method
+    public void removeStreamfromDB() {
+        try {
+            dbHandler.removeStreamfromDB(username);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    //Viewer method
+    public void getStreamInfo() {
+        try {
+            DataInputStream dis = new DataInputStream(socket.getInputStream());
+            String streamerUsername = dis.readUTF();
+            dis.close();
+
+            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+            LiveStream livestream = dbHandler.getStream(streamerUsername);
+            oos.writeObject(livestream);
+            oos.flush(); oos.close();
         }
         catch(Exception e) {
             e.printStackTrace();
         }
     }
 
+    //User method
     public void endConnection() {
         running = false;
     }

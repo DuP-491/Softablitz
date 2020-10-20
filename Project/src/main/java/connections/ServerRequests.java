@@ -4,7 +4,9 @@ public enum ServerRequests {
     ASSIGNID(0),
     RETURNID(1),
     ENDCONNECTION(2),
-    GETID(3);
+    GETSTREAM(3),
+    ADDSTREAMTODB(4),
+    REMOVESTREAMFROMDB(5);
 
     private int id;
 

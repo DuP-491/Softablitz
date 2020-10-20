@@ -8,6 +8,7 @@ import stream.LiveStream;
 import javax.xml.crypto.Data;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.ObjectInputStream;
 import java.time.LocalDateTime;
 
 public class Viewer extends User {
@@ -21,30 +22,23 @@ public class Viewer extends User {
 
     //Called whenever viewer starts watching anyone, or changes to someone else
     public void startWatching(String streamerUsername) {
-        Streamer streamer = null;
-        String title = null;
-        Category cat = null;
-        int id = -1;
 
-        //get title, streamer and category from DB
-        //get id from server
         try {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
-            dos.writeInt(ServerRequests.GETID.geti());
+            dos.writeInt(ServerRequests.GETSTREAM.geti()); dos.flush();
 
             dos.writeUTF(streamerUsername);
-            dos.close();
+            dos.flush(); dos.close();
 
-            DataInputStream dis = new DataInputStream(socket.getInputStream());
-            id = dis.readInt();
-            dis.close();
+            ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+            currentlyWatching = (LiveStream) ois.readObject();
+            ois.close();
 
         }
         catch (Exception e) {
             e.printStackTrace();
         }
 
-        currentlyWatching = new LiveStream(title, cat, id, streamer);
         currentlyWatching.startWatching();
     }
 

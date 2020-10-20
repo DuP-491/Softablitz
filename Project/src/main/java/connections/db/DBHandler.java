@@ -3,19 +3,23 @@ package connections.db;
 import java.sql.*;
 import java.time.LocalDateTime;
 
+import connections.IDAssigner;
 import stream.Category;
+import stream.LiveStream;
 import user.Status;
 import user.Streamer;
 import user.User;
 
 public class DBHandler {
     private Connection connection;
+    private IDAssigner assigner;
 
-    public DBHandler() {
+    public DBHandler(IDAssigner assigner) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
             String password = "password";
             this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/livestreamdb?characterEncoding=latin1&useConfigs=maxPerformance","this",password);
+            this.assigner = assigner;
         }
         catch (Exception e) {
             System.out.println("Meme");
@@ -134,7 +138,7 @@ public class DBHandler {
         return followList;
     }
 
-    public synchronized void addStreamtoDB(String streamerUsername, String title, int category, Time starttime) {
+    public synchronized void addStreamtoDB(String streamerUsername, String title, int category, java.sql.Timestamp starttime) {
         try {
             PreparedStatement pst = connection.prepareStatement("insert into streams (streamerusername, title, category, viewcount, starttime) values(?,?,?,?,?)");
 
@@ -142,7 +146,7 @@ public class DBHandler {
             pst.setString(2,title);
             pst.setInt(3,category);
             pst.setInt(4,0);
-            pst.setTime(5,starttime);
+            pst.setTimestamp(5,starttime);
 
             pst.executeUpdate();
 
@@ -164,6 +168,34 @@ public class DBHandler {
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public synchronized LiveStream getStream(String streamerUsername) {
+        try {
+            String query = "select * from streams where streamerusername=?";
+            PreparedStatement ps = connection.prepareStatement(query);
+
+            ps.setString(1,streamerUsername);
+            ResultSet rs = ps.executeQuery();
+
+            if(rs.next()) {
+                int id = assigner.getID(streamerUsername);
+                String title = rs.getString("title");
+                Category cat = null; int c = rs.getInt("category");
+                for(Category i : Category.values()) {
+                    if(i.compare(c)) { cat = i; break; }
+                }
+                LocalDateTime starttime = rs.getTimestamp("starttime").toLocalDateTime();
+
+                LiveStream livestream = new LiveStream(title, cat, id, streamerUsername);
+                livestream.setStartedAtTime(starttime);
+                return livestream;
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     static int getSize(ResultSet rs) {

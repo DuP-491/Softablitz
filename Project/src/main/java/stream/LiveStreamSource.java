@@ -3,11 +3,13 @@ package stream;
 import user.Streamer;
 
 public class LiveStreamSource extends LiveStream {
+    private Streamer streamer;
     private ImageSender imageSender;
     private AudioSender audioSender;
 
     public LiveStreamSource(String title, Category cat, int id, Streamer streamer) {
-        super(title, cat, id, streamer);
+        super(title, cat, id, streamer.getUsername());
+        this.streamer = streamer;
     }
 
     public void startStreaming() {

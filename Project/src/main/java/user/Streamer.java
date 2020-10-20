@@ -22,14 +22,18 @@ public class Streamer extends User {
         try {
             DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
             dos.writeInt(ServerRequests.RETURNID.geti());
-            dos.flush(); dos.close();
+            dos.flush();
+
+            dos.writeInt(ServerRequests.REMOVESTREAMFROMDB.geti());
+            dos.flush();
+
+            dos.close();
         }
         catch (Exception e) {
             e.printStackTrace();
         }
         myStream.stopStreaming();
         myStream = null;
-        //uToDB.removeStreamfromDB(this);
     }
 
     public void startStreaming(String title, Category cat) {
@@ -50,7 +54,21 @@ public class Streamer extends User {
             e.printStackTrace();
         }
         myStream = new LiveStreamSource(title, cat, id, this);
-        //uToDB.addStreamtoDB(this);
+
+        try {
+            DataOutputStream dos = new DataOutputStream(socket.getOutputStream());
+            dos.writeInt(ServerRequests.ADDSTREAMTODB.geti());
+            dos.flush();
+
+            dos.writeUTF(title); dos.flush();
+            dos.writeInt(cat.geti()); dos.flush();
+            dos.close();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
         myStream.startStreaming();
     }
 

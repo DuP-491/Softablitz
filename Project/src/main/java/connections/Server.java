@@ -12,7 +12,7 @@ public class Server extends Thread {
 
     public Server() {
         assigner = new IDAssigner();
-        dbHandler = new DBHandler();
+        dbHandler = new DBHandler(assigner);
     }
 
     public void run() {
