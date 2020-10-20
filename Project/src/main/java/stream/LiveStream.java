@@ -3,6 +3,7 @@ package stream;
 import chat.ChatMessage;
 
 import java.awt.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
 
@@ -13,9 +14,9 @@ import user.Streamer;
 import javax.swing.*;
 
 
-public class LiveStream extends Canvas implements Runnable {
+public class LiveStream extends Canvas implements Runnable, Serializable {
     protected int viewCount;
-    protected Streamer streamer;
+    protected String streamerUsername;
     protected LocalDateTime startedAtTime;
     protected Category category;
     protected String title;
@@ -39,15 +40,19 @@ public class LiveStream extends Canvas implements Runnable {
     protected JFrame j;
 
 
-    public LiveStream(String title, Category cat, int id, Streamer streamer) {
+    public LiveStream(String title, Category cat, int id, String streamerUsername) {
         this.ID = id;
-        this.streamer = streamer;
+        this.streamerUsername = streamerUsername;
         this.startedAtTime = LocalDateTime.now();
         this.category = cat;
         this.title = title;
         allUsersMessageQueue = new LinkedList<ChatMessage>();
         subOnlyMessageQueue = new LinkedList<ChatMessage>();
 
+    }
+
+    public void setStartedAtTime(LocalDateTime s) {
+        startedAtTime = s;
     }
 
     //This will be called on the machine where we want to view
@@ -136,7 +141,7 @@ public class LiveStream extends Canvas implements Runnable {
 
     @Override
     public String toString() {
-        String ans = streamer.getUsername() + ": " + title + " in " + category;
+        String ans = streamerUsername + ": " + title + " in " + category;
         return ans;
     }
 }

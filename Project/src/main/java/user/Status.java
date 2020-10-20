@@ -10,4 +10,5 @@ public enum Status {
     Status(int i) {
         id = i;
     }
+    public boolean compare(int i) {return id == i;}
 }
