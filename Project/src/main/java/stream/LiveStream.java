@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import chat.MessageReciever;
 import chat.MessageSender;
 import user.Streamer;
+import user.Viewer;
 
 import javax.swing.*;
 
@@ -165,5 +166,9 @@ public class LiveStream implements Runnable, Serializable {
 
     public int getID() {
         return this.ID;
+    }
+
+    public void markAsViewer(Viewer self) {
+        j.markAsViewer(self);
     }
 }

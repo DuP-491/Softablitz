@@ -52,6 +52,7 @@ public class Viewer extends User {
         }
 
         currentlyWatching.startWatching();
+        currentlyWatching.markAsViewer(this);
         Thread t = new Thread(currentlyWatching);
         t.start();
 

@@ -48,4 +48,16 @@ public class User implements Serializable {
         }
     }
 
+    public void end() {
+        try {
+            socket.close();
+            oos.close();
+            ois.close();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

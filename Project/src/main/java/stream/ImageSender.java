@@ -123,6 +123,8 @@ public class ImageSender extends Thread {
                 if (stream.getMode() == StreamMode.WEBCAM) this.captureCam();
                 else this.captureScreen();
 
+                //currentFrame = scale(currentFrame, 640,480);
+
                 byte[] imageByteArray = bufferedImageToByteArray(this.currentFrame, OUTPUT_FORMAT);
                 int packets = (int) Math.ceil(imageByteArray.length / (float) DATAGRAM_MAX_SIZE);
 
@@ -163,7 +165,7 @@ public class ImageSender extends Thread {
     }
 
     public void captureCam() {
-        //Keep updating currentFrame by capturing webcam photos
+        //Keep updating currentFrame by capturing  webcam photos
         try {
             this.currentFrame = webcam.getImage();
             im = new ImageIcon(currentFrame);
@@ -174,7 +176,7 @@ public class ImageSender extends Thread {
 
     public void captureScreen() {
         try {
-            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            Dimension screenSize = new Dimension(640,480); //Temporary, because scale method is very slow
             Rectangle screenRectangle = new Rectangle(screenSize);
             this.currentFrame = robot.createScreenCapture(screenRectangle);
 
