@@ -83,6 +83,7 @@ new FormModel {
 			add( new FormComponent( "javax.swing.JButton" ) {
 				name: "button2"
 				"text": "Post"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "allUsersMessagePressed", true ) )
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
 				"value": "cell 23 6 18 1,width 80:80:80"
 			} )

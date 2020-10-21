@@ -25,6 +25,9 @@ public class MessageReciever extends Thread {
             this.stream = stream;
             ia = InetAddress.getByName(group);
             running = true;
+
+            msocket = new MulticastSocket(PORT);
+            msocket.joinGroup(ia);
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -43,6 +46,7 @@ public class MessageReciever extends Thread {
             ChatMessage message = (ChatMessage) ois.readObject();
 
             stream.pushMessage(message);
+            System.out.println("Pushed");
         }
         catch (Exception e) {
             //System.out.println("Message recieve memes");
@@ -50,6 +54,7 @@ public class MessageReciever extends Thread {
     }
 
     public void stopThread() {
+        msocket.close();
         running = false;
     }
 

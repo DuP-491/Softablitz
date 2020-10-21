@@ -39,6 +39,12 @@ public class StreamWindow extends JFrame {
         streamer.changeMode();
     }
 
+    private void allUsersMessagePressed(ActionEvent e) {
+        // TODO add your code here
+        String text = textField2.getText();
+        viewer.sendMessage(text);
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Diptarag Ray Chaudhuri
@@ -139,14 +145,13 @@ public class StreamWindow extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(
-            new javax.swing.border.EmptyBorder(0,0,0,0), "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e"
-            ,javax.swing.border.TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM
-            ,new java.awt.Font("D\u0069al\u006fg",java.awt.Font.BOLD,12)
-            ,java.awt.Color.red),panel1. getBorder()));panel1. addPropertyChangeListener(
-            new java.beans.PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e
-            ){if("\u0062or\u0064er".equals(e.getPropertyName()))throw new RuntimeException()
-            ;}});
+            panel1.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.
+            swing.border.EmptyBorder(0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border
+            .TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("D\u0069alog"
+            ,java.awt.Font.BOLD,12),java.awt.Color.red),panel1. getBorder
+            ()));panel1. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java
+            .beans.PropertyChangeEvent e){if("\u0062order".equals(e.getPropertyName()))throw new RuntimeException
+            ();}});
             panel1.setLayout(new MigLayout(
                 "hidemode 3",
                 // columns
@@ -198,6 +203,7 @@ public class StreamWindow extends JFrame {
 
         //---- button2 ----
         button2.setText("Post");
+        button2.addActionListener(e -> allUsersMessagePressed(e));
         contentPane.add(button2, "cell 23 6 18 1,width 80:80:80");
         pack();
         setLocationRelativeTo(getOwner());
@@ -210,12 +216,13 @@ public class StreamWindow extends JFrame {
     }
 
     public void markAsViewer(Viewer self) {
-        this.viewer = viewer;
+        this.viewer = self;
         button1.setVisible(true);
         button2.setVisible(true);
         textField1.setVisible(true);
         textField2.setVisible(true);
 
+        System.out.println("Marked viewer");
     }
 
     public void setIcon(BufferedImage image) {
@@ -224,6 +231,10 @@ public class StreamWindow extends JFrame {
 
     public void setTitle(String title) {
         label3.setText(title);
+    }
+
+    public void setMessageBlockText(String messageBlock) {
+        textArea3.setText(messageBlock);
     }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables

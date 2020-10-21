@@ -6,30 +6,26 @@ import user.Viewer;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
-enum Access {
+enum Access implements Serializable{
     ALLUSERS,
     SUBONLY
 }
 
 public class ChatMessage implements Serializable {
-    private Viewer sender;
-    private LiveStream streamSentOn;
+    private String senderUsername;
     private String content;
-    private LocalDateTime sentAt;
     private Access access;
 
-    public ChatMessage(Viewer sender, LiveStream streamSentOn, String content, LocalDateTime sentAt, int access) {
-        this.sender = sender;
-        this.streamSentOn = streamSentOn;
+    public ChatMessage(String sender, String content, int access) {
+        this.senderUsername = sender;
         this.content = content;
-        this.sentAt = sentAt;
         if(access == 0) this.access = Access.ALLUSERS;
         else this.access = Access.SUBONLY;
     }
 
     @Override
     public String toString() {
-        String mes = this.sender + ": " + this.content;
+        String mes = this.senderUsername + ": " + this.content;
         return mes;
     }
 
