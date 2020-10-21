@@ -39,7 +39,7 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
 
     protected int chatCapacity = 200;
 
-    protected JFrame j;
+    protected StreamWindow j;
 
 
     public LiveStream(String title, Category cat, int id, String streamerUsername) {
@@ -72,7 +72,7 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
         t = new Thread(audioReciever); t.start(); //start recieving audio on new thread
         t = new Thread(messageReciever); t.start(); // start recieving messages on new thread
 
-        j = new JFrame();
+        j = new StreamWindow();
         j.add(this);
         j.setSize(1000,800);
         j.setVisible(true);
@@ -87,6 +87,8 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
                     }
                 }
         );
+
+        j.setTitle(this.toString());
 
 
         running = true;
@@ -145,11 +147,7 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
 
     public void update() {
         try {
-            Graphics g = this.getGraphics();
-            g.drawString(this + "",50,50);
-            ImageIcon im = new ImageIcon(imageReciever.currentFrame);
-            im.paintIcon(this, g, 50, 60);
-
+            j.setIcon(imageReciever.currentFrame);
 
         } catch (Exception e) {
             //System.out.println("Cant get currentframe");
