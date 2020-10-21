@@ -112,6 +112,7 @@ public class ImageSender extends Thread {
     }
 
     public void stopThread() {
+        webcam.close();
         running = false;
     }
 

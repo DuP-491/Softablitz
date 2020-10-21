@@ -54,6 +54,7 @@ public class HandleClient extends Thread {
             }
             catch (Exception e) {
                 e.printStackTrace();
+                endConnection(); //Temporary
             }
         }
     }

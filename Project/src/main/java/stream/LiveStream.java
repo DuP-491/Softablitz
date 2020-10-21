@@ -3,6 +3,8 @@ package stream;
 import chat.ChatMessage;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -48,6 +50,21 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
         allUsersMessageQueue = new LinkedList<ChatMessage>();
         subOnlyMessageQueue = new LinkedList<ChatMessage>();
 
+        j = new JFrame();
+        j.add(this);
+        j.setSize(1000,800);
+        j.setVisible(true);
+        j.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+        j.addWindowListener(
+                new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        stopWatching();
+                        super.windowClosing(e);
+                    }
+                }
+        );
     }
 
     public void setStartedAtTime(LocalDateTime s) {
@@ -84,6 +101,8 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
 
         messageReciever.stopThread();
         messageReciever = null;
+
+        System.out.println("Stopped watching");
     }
 
     public void pushMessage(ChatMessage message) {
@@ -111,11 +130,6 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
     @Override
     public void run() {
         int count = 0;
-        j = new JFrame();
-        j.add(this);
-        j.setSize(1000,800);
-        j.setVisible(true);
-        j.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         System.out.println(running);
         while(running) {
             count++;
@@ -133,8 +147,10 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
             g.drawString(this + "",50,50);
             ImageIcon im = new ImageIcon(imageReciever.currentFrame);
             im.paintIcon(this, g, 50, 60);
+
+
         } catch (Exception e) {
-            System.out.println("Cant get currentframe");
+            //System.out.println("Cant get currentframe");
         }
     }
 
