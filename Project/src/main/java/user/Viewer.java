@@ -5,8 +5,11 @@ import connections.ServerRequests;
 import stream.Category;
 import stream.LiveStream;
 
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
-public class Viewer extends User {
+
+public class Viewer extends User implements Serializable {
     private LiveStream currentlyWatching;
     private User[] subList;
     private User[] followList;
@@ -72,6 +75,11 @@ public class Viewer extends User {
     public void getFollowList() {
         //followList = uToDB.getFollowList(this);
         //query for follows in DB and update this.followList
+    }
+
+    public void sendMessage(String content) {
+        System.out.println(content);
+        currentlyWatching.sendMessage(new ChatMessage(this.getUsername(),content,0));
     }
 
 }

@@ -11,6 +11,7 @@ import java.util.LinkedList;
 
 import chat.MessageReciever;
 import chat.MessageSender;
+import test.connections.Message;
 import user.Streamer;
 import user.Viewer;
 
@@ -36,11 +37,13 @@ public class LiveStream implements Runnable, Serializable {
 
     protected MessageSender messageSender;
 
-    public static int MESSAGE_REFRESH_INTERVAL = 1000000;
+    public static int MESSAGE_REFRESH_INTERVAL = 100000;
 
     protected int chatCapacity = 200;
 
     protected StreamWindow j;
+
+    private String messageBlock;
 
 
     public LiveStream(String title, Category cat, int id, String streamerUsername) {
@@ -123,6 +126,13 @@ public class LiveStream implements Runnable, Serializable {
 
     public void refreshMessages() {
         //update both sub only and all user chat window
+        messageBlock = "";
+        for(int i = 0; i < allUsersMessageQueue.size(); i++) {
+            messageBlock += allUsersMessageQueue.get(i).toString();
+            messageBlock += "\n";
+        }
+        j.setMessageBlockText(messageBlock);
+        //System.out.println("refreshed");
     }
 
     public String getTitle() {
@@ -170,5 +180,10 @@ public class LiveStream implements Runnable, Serializable {
 
     public void markAsViewer(Viewer self) {
         j.markAsViewer(self);
+    }
+
+    public void sendMessage(ChatMessage message) {
+        System.out.println(message);
+        messageSender.sendMessage(message);
     }
 }

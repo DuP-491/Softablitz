@@ -19,12 +19,19 @@ public class MessageReciever extends Thread {
     private LiveStream stream;
     private boolean running;
 
+
+    private ByteArrayInputStream bis;
+    private ObjectInputStream ois;
+
     public MessageReciever(String group, LiveStream stream) {
         try {
             this.group = group;
             this.stream = stream;
             ia = InetAddress.getByName(group);
             running = true;
+
+            msocket = new MulticastSocket(PORT);
+            msocket.joinGroup(ia);
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -33,16 +40,17 @@ public class MessageReciever extends Thread {
 
     public void recieveMessage() {
         try {
-            byte[] buffer = new byte[65507];
+            byte[] buffer = new byte[5000];
             dpacket = new DatagramPacket(buffer, buffer.length);
             msocket.receive(dpacket);
             byte[] data = dpacket.getData();
 
-            ByteArrayInputStream bis = new ByteArrayInputStream(data);
-            ObjectInputStream ois = new ObjectInputStream(bis);
+            bis = new ByteArrayInputStream(data);
+            ois = new ObjectInputStream(bis);
             ChatMessage message = (ChatMessage) ois.readObject();
 
             stream.pushMessage(message);
+            System.out.println("Pushed" + message.toString());
         }
         catch (Exception e) {
             //System.out.println("Message recieve memes");
@@ -50,6 +58,7 @@ public class MessageReciever extends Thread {
     }
 
     public void stopThread() {
+        msocket.close();
         running = false;
     }
 
