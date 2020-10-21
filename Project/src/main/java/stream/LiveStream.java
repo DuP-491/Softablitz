@@ -16,7 +16,7 @@ import user.Streamer;
 import javax.swing.*;
 
 
-public class LiveStream extends Canvas implements Runnable, Serializable {
+public class LiveStream implements Runnable, Serializable {
     protected int viewCount;
     protected String streamerUsername;
     protected LocalDateTime startedAtTime;
@@ -73,7 +73,6 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
         t = new Thread(messageReciever); t.start(); // start recieving messages on new thread
 
         j = new StreamWindow();
-        j.add(this);
         j.setSize(1000,800);
         j.setVisible(true);
         j.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
