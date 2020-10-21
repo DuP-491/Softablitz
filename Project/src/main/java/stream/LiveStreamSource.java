@@ -15,18 +15,11 @@ public class LiveStreamSource extends LiveStream {
         this.streamer = streamer;
         mode = StreamMode.WEBCAM;
 
-        j.addWindowListener(
-                new WindowAdapter() {
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-                        stopStreaming();
-                        super.windowClosing(e);
-                    }
-                }
-        );
     }
 
     public void startStreaming() {
+        startWatching();
+
         String imageGroup = "225.4.6." + Integer.toString(ID);
         String audioGroup = "225.4.6." + Integer.toString(ID+1);
 
@@ -36,7 +29,16 @@ public class LiveStreamSource extends LiveStream {
         Thread t = new Thread(imageSender); t.start();
         t = new Thread(audioSender); t.start();
 
-        startWatching();
+        j.addWindowListener(
+                new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        streamer.stopStreaming();
+                        super.windowClosing(e);
+                    }
+                }
+        );
+
     }
 
     public void setMode(int mode) {

@@ -50,21 +50,6 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
         allUsersMessageQueue = new LinkedList<ChatMessage>();
         subOnlyMessageQueue = new LinkedList<ChatMessage>();
 
-        j = new JFrame();
-        j.add(this);
-        j.setSize(1000,800);
-        j.setVisible(true);
-        j.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-
-        j.addWindowListener(
-                new WindowAdapter() {
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-                        stopWatching();
-                        super.windowClosing(e);
-                    }
-                }
-        );
     }
 
     public void setStartedAtTime(LocalDateTime s) {
@@ -86,6 +71,23 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
         Thread t = new Thread(imageReciever); t.start(); //start recieveing images on new thread
         t = new Thread(audioReciever); t.start(); //start recieving audio on new thread
         t = new Thread(messageReciever); t.start(); // start recieving messages on new thread
+
+        j = new JFrame();
+        j.add(this);
+        j.setSize(1000,800);
+        j.setVisible(true);
+        j.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+        j.addWindowListener(
+                new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        stopWatching();
+                        super.windowClosing(e);
+                    }
+                }
+        );
+
 
         running = true;
     }
@@ -158,5 +160,13 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
     public String toString() {
         String ans = streamerUsername + ": " + title + " in " + category;
         return ans;
+    }
+
+    public Category getCategory() {
+        return this.category;
+    }
+
+    public int getID() {
+        return this.ID;
     }
 }
