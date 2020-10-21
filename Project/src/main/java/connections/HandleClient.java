@@ -54,6 +54,7 @@ public class HandleClient extends Thread {
             }
             catch (Exception e) {
                 e.printStackTrace();
+                endConnection(); //Temporary
             }
         }
     }
@@ -124,8 +125,8 @@ public class HandleClient extends Thread {
         try {
             String streamerUsername = ois.readUTF();
 
-            ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
             LiveStream livestream = dbHandler.getStream(streamerUsername);
+
             oos.writeObject(livestream);
             oos.flush();
         }

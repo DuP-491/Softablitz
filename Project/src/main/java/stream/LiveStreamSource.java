@@ -2,6 +2,9 @@ package stream;
 
 import user.Streamer;
 
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
 public class LiveStreamSource extends LiveStream {
     private Streamer streamer;
     private ImageSender imageSender;
@@ -11,9 +14,12 @@ public class LiveStreamSource extends LiveStream {
         super(title, cat, id, streamer.getUsername());
         this.streamer = streamer;
         mode = StreamMode.WEBCAM;
+
     }
 
     public void startStreaming() {
+        startWatching();
+
         String imageGroup = "225.4.6." + Integer.toString(ID);
         String audioGroup = "225.4.6." + Integer.toString(ID+1);
 
@@ -23,7 +29,16 @@ public class LiveStreamSource extends LiveStream {
         Thread t = new Thread(imageSender); t.start();
         t = new Thread(audioSender); t.start();
 
-        startWatching();
+        j.addWindowListener(
+                new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        streamer.stopStreaming();
+                        super.windowClosing(e);
+                    }
+                }
+        );
+
     }
 
     public void setMode(int mode) {
@@ -38,6 +53,7 @@ public class LiveStreamSource extends LiveStream {
         audioSender.stopThread();
         audioSender = null;
 
-        stopWatching();
+        //stopWatching();
+        System.out.println("Stopped streaming");
     }
 }

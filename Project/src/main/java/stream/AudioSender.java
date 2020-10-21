@@ -49,6 +49,7 @@ public class AudioSender extends Thread {
     }
 
     public void stopThread() {
+        microphone.close();
         running = false;
     }
 
@@ -63,7 +64,7 @@ public class AudioSender extends Thread {
             data = new byte[microphone.getBufferSize() / 5];
         }
         catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
             System.out.println("Sending me dikkat");
         }
         while(running) {

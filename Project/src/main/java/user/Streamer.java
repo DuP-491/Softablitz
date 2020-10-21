@@ -16,7 +16,7 @@ public class Streamer extends User {
         //Handle stop streaming here
 
         //Ask IDAssigner to free his id
-        try {
+        try {//Remove stream from db
             oos.writeInt(ServerRequests.RETURNID.geti());
             oos.flush();
 
@@ -49,12 +49,12 @@ public class Streamer extends User {
         }
         myStream = new LiveStreamSource(title, cat, id, this);
 
-        try {
-            /*oos.writeInt(ServerRequests.ADDSTREAMTODB.geti()); //for later
+        try {//Add stream to db
+            oos.writeInt(ServerRequests.ADDSTREAMTODB.geti());
             oos.flush();
 
             oos.writeUTF(title); oos.flush();
-            oos.writeInt(cat.geti()); oos.flush();*/
+            oos.writeInt(cat.geti()); oos.flush();
         }
         catch (Exception e) {
             e.printStackTrace();

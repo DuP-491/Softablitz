@@ -42,6 +42,9 @@ public class Viewer extends User {
             oos.flush();
 
             currentlyWatching = (LiveStream) ois.readObject();
+            System.out.println(currentlyWatching.getTitle());
+            System.out.println(currentlyWatching.getCategory());
+            System.out.println(currentlyWatching.getID());
 
         }
         catch (Exception e) {
@@ -49,6 +52,9 @@ public class Viewer extends User {
         }
 
         currentlyWatching.startWatching();
+        Thread t = new Thread(currentlyWatching);
+        t.start();
+
     }
 
     public void stopWatching() {

@@ -3,6 +3,8 @@ package stream;
 import chat.ChatMessage;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
@@ -14,7 +16,7 @@ import user.Streamer;
 import javax.swing.*;
 
 
-public class LiveStream extends Canvas implements Runnable, Serializable {
+public class LiveStream implements Runnable, Serializable {
     protected int viewCount;
     protected String streamerUsername;
     protected LocalDateTime startedAtTime;
@@ -37,7 +39,7 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
 
     protected int chatCapacity = 200;
 
-    protected JFrame j;
+    protected StreamWindow j;
 
 
     public LiveStream(String title, Category cat, int id, String streamerUsername) {
@@ -70,6 +72,24 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
         t = new Thread(audioReciever); t.start(); //start recieving audio on new thread
         t = new Thread(messageReciever); t.start(); // start recieving messages on new thread
 
+        j = new StreamWindow();
+        j.setSize(1000,800);
+        j.setVisible(true);
+        j.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+        j.addWindowListener(
+                new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        stopWatching();
+                        super.windowClosing(e);
+                    }
+                }
+        );
+
+        j.setTitle(this.toString());
+
+
         running = true;
     }
 
@@ -84,6 +104,8 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
 
         messageReciever.stopThread();
         messageReciever = null;
+
+        System.out.println("Stopped watching");
     }
 
     public void pushMessage(ChatMessage message) {
@@ -111,11 +133,6 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
     @Override
     public void run() {
         int count = 0;
-        j = new JFrame();
-        j.add(this);
-        j.setSize(1000,800);
-        j.setVisible(true);
-        j.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         System.out.println(running);
         while(running) {
             count++;
@@ -129,12 +146,10 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
 
     public void update() {
         try {
-            Graphics g = this.getGraphics();
-            g.drawString(this + "",50,50);
-            ImageIcon im = new ImageIcon(imageReciever.currentFrame);
-            im.paintIcon(this, g, 50, 60);
+            j.setIcon(imageReciever.currentFrame);
+
         } catch (Exception e) {
-            System.out.println("Cant get currentframe");
+            //System.out.println("Cant get currentframe");
         }
     }
 
@@ -142,5 +157,13 @@ public class LiveStream extends Canvas implements Runnable, Serializable {
     public String toString() {
         String ans = streamerUsername + ": " + title + " in " + category;
         return ans;
+    }
+
+    public Category getCategory() {
+        return this.category;
+    }
+
+    public int getID() {
+        return this.ID;
     }
 }

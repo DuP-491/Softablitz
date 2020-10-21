@@ -53,6 +53,7 @@ public class AudioReciever extends Thread {
     }
 
     public void stopThread() {
+        speakers.close();
         running = false;
     }
 

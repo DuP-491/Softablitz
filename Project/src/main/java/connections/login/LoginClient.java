@@ -42,7 +42,7 @@ public class LoginClient extends Thread {
             }
             catch (Exception e) {
                 e.printStackTrace();
-                endConnection();
+                endConnection(); //Temporary
             }
         }
     }
