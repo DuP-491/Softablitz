@@ -183,6 +183,7 @@ public class LiveStream implements Runnable, Serializable {
     }
 
     public void sendMessage(ChatMessage message) {
+        System.out.println(message);
         messageSender.sendMessage(message);
     }
 }

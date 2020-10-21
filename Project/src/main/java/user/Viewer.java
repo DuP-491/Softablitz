@@ -78,6 +78,7 @@ public class Viewer extends User implements Serializable {
     }
 
     public void sendMessage(String content) {
+        System.out.println(content);
         currentlyWatching.sendMessage(new ChatMessage(this.getUsername(),content,0));
     }
 

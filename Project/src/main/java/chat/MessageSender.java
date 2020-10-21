@@ -2,7 +2,9 @@ package chat;
 
 import stream.LiveStream;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
@@ -23,8 +25,6 @@ public class MessageSender {
             this.group = group;
             this.stream = stream;
             ia = InetAddress.getByName(group);
-            bos = new ByteArrayOutputStream();
-            oos = new ObjectOutputStream(bos);
 
             msocket = new MulticastSocket(PORT);
             msocket.joinGroup(ia);
@@ -36,10 +36,15 @@ public class MessageSender {
 
     public void sendMessage(ChatMessage message) {
         try {
-            oos.writeObject(message);
+            bos = new ByteArrayOutputStream();
+            oos = new ObjectOutputStream(bos);
+
+            System.out.println(message);
+            oos.writeUnshared(message);
             oos.flush();
 
             byte[] data = bos.toByteArray();
+
             msocket = new MulticastSocket();
             msocket.setTimeToLive(2);
             dpacket = new DatagramPacket(data, data.length, ia, PORT);

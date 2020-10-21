@@ -42,6 +42,7 @@ public class StreamWindow extends JFrame {
     private void allUsersMessagePressed(ActionEvent e) {
         // TODO add your code here
         String text = textField2.getText();
+        System.out.println(text);
         viewer.sendMessage(text);
     }
 
