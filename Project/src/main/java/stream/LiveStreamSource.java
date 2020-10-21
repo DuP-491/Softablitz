@@ -2,6 +2,7 @@ package stream;
 
 import user.Streamer;
 
+import javax.swing.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
@@ -39,11 +40,18 @@ public class LiveStreamSource extends LiveStream {
                 }
         );
 
+        j.markAsStreamer(this.streamer);
+
     }
 
     public void setMode(int mode) {
         if(mode == 1) { this.mode = StreamMode.WEBCAM; }
         else this.mode = StreamMode.SCREENCAP;
+    }
+
+    public void changeMode() {
+        if(mode == StreamMode.SCREENCAP) mode = StreamMode.WEBCAM;
+        else mode = StreamMode.SCREENCAP;
     }
 
     public void stopStreaming() {

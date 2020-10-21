@@ -66,8 +66,8 @@ public class Streamer extends User {
         t.start();
     }
 
-    public void setMode(int mode) {
-        myStream.setMode(mode);
+    public void changeMode() {
+        myStream.changeMode();
     }
 
     public LiveStream getStream() {

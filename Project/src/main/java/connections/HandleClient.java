@@ -126,6 +126,9 @@ public class HandleClient extends Thread {
             String streamerUsername = ois.readUTF();
 
             LiveStream livestream = dbHandler.getStream(streamerUsername);
+            System.out.println(livestream.getTitle());
+            System.out.println(livestream.getCategory());
+            System.out.println(livestream.getID());
 
             oos.writeObject(livestream);
             oos.flush();
@@ -137,6 +140,14 @@ public class HandleClient extends Thread {
 
     //User method
     public void endConnection() {
-        running = false;
+        try {
+            running = false;
+            socket.close();
+            oos.close();
+            ois.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

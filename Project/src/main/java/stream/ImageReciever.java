@@ -31,7 +31,12 @@ public class ImageReciever extends Thread {
     }
 
     public void stopThread() {
-        running = false;
+        try {
+            running = false;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void run() {

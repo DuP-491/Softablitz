@@ -86,6 +86,14 @@ public class LoginClient extends Thread {
     }
 
     public void endConnection() {
-        running = false;
+        try {
+            oos.close();
+            ois.close();
+            socket.close();
+            running = false;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
