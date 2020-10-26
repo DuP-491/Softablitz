@@ -3,12 +3,11 @@ package connections;
 import connections.db.DBHandler;
 import stream.Category;
 import stream.LiveStream;
+import user.Status;
 
-import java.io.DataInput;
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
 import java.net.Socket;
-import java.sql.Time;
 import java.util.Date;
 
 public class HandleClient extends Thread {
@@ -39,6 +38,8 @@ public class HandleClient extends Thread {
     }
 
     public void run() {
+        dbHandler.setStatus(username, Status.ONLINE);
+
         while(running) {
             try {
                 int request = ois.readInt();
@@ -47,10 +48,11 @@ public class HandleClient extends Thread {
                 if(ServerRequests.ASSIGNID.compare(request)) { assignID(); }
                 else if(ServerRequests.RETURNID.compare(request)) { returnID(); }
                 else if(ServerRequests.ENDCONNECTION.compare(request)) { endConnection(); }
-                else if(ServerRequests.GETSTREAM.compare(request)) { getStreamInfo(); }
+                else if(ServerRequests.GETSTREAM.compare(request)) { watch(); }
                 else if(ServerRequests.ADDSTREAMTODB.compare(request)) { addStreamTODB(); }
                 else if(ServerRequests.REMOVESTREAMFROMDB.compare(request)) { removeStreamfromDB(); }
                 else if(ServerRequests.BROWSECATEGORY.compare(request)) { getStreamsByCategory(); }
+                else if(ServerRequests.STOPWATCHING.compare(request)) { stopWatching(); }
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -104,6 +106,8 @@ public class HandleClient extends Thread {
             category = ois.readInt();
 
             dbHandler.addStreamtoDB(username, title, category, starttime);
+
+            dbHandler.setStatus(username, Status.STREAMING);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -114,6 +118,7 @@ public class HandleClient extends Thread {
     public void removeStreamfromDB() {
         try {
             dbHandler.removeStreamfromDB(username);
+            dbHandler.setStatus(username, Status.ONLINE);
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -121,7 +126,7 @@ public class HandleClient extends Thread {
     }
 
     //Viewer method
-    public void getStreamInfo() {
+    public void watch() {
         try {
             String streamerUsername = ois.readUTF();
 
@@ -132,6 +137,18 @@ public class HandleClient extends Thread {
 
             oos.writeObject(livestream);
             oos.flush();
+
+            dbHandler.setStatus(username, Status.WATCHING);
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void stopWatching() {
+        try {
+            dbHandler.setStatus(username, Status.ONLINE);
+            System.out.println("stopped watching serverside");
         }
         catch(Exception e) {
             e.printStackTrace();
@@ -141,6 +158,8 @@ public class HandleClient extends Thread {
     //User method
     public void endConnection() {
         try {
+            dbHandler.setStatus(username, Status.OFFLINE);
+
             running = false;
             socket.close();
             oos.close();

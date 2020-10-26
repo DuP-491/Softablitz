@@ -198,6 +198,22 @@ public class DBHandler {
         return null;
     }
 
+
+    public synchronized  void setStatus(String selfUsername, Status status) {
+        try {
+            String update = "update users set status=? where username=?";
+            PreparedStatement pst = connection.prepareStatement(update);
+
+            pst.setInt(1, status.geti());
+            pst.setString(2, selfUsername);
+            pst.executeUpdate();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     static int getSize(ResultSet rs) {
         int size = 0;
         try {

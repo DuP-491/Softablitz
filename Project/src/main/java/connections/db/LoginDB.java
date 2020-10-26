@@ -37,10 +37,11 @@ public class LoginDB {
 
             ps.executeUpdate();
 
-            update = "insert into authentication (username,password) values (?,?)";
+            update = "insert into authentication (username,password,status) values (?,?,?)";
             ps = connection.prepareStatement(update);
             ps.setString(1,username);
             ps.setString(2,password);
+            ps.setInt(3,0);
 
             ps.executeUpdate();
 

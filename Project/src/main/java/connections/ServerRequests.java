@@ -9,7 +9,8 @@ public enum ServerRequests {
     REMOVESTREAMFROMDB(5),
     REGISTERUSER(6),
     LOGIN(7),
-    BROWSECATEGORY(8);
+    BROWSECATEGORY(8),
+    STOPWATCHING(9);
 
     private int id;
 

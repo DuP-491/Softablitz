@@ -81,18 +81,7 @@ public class LiveStream implements Runnable, Serializable {
         j.setVisible(true);
         j.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        j.addWindowListener(
-                new WindowAdapter() {
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-                        stopWatching();
-                        super.windowClosing(e);
-                    }
-                }
-        );
-
         j.setTitle(this.toString());
-
 
         running = true;
     }
