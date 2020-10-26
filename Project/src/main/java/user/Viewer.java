@@ -130,4 +130,18 @@ public class Viewer extends User implements Serializable {
         }
     }
 
+    public void follow(String streamerUsername) {
+        try {
+            oos.writeInt(ServerRequests.FOLLOW.geti());
+            oos.flush();
+
+            oos.writeUTF(streamerUsername);
+            oos.flush();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 }

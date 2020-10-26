@@ -56,6 +56,8 @@ public class HandleClient extends Thread {
                 else if(ServerRequests.STOPWATCHING.compare(request)) { stopWatching(); }
                 else if(ServerRequests.CHECKOUTUSER.compare(request)) { getUser(); }
                 else if(ServerRequests.UPDATEUSERINFO.compare(request)) { updateUserInfo(); }
+                else if(ServerRequests.FOLLOW.compare(request)) { addFollow(); }
+                else if(ServerRequests.SUB.compare(request)) { }
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -178,6 +180,17 @@ public class HandleClient extends Thread {
             String newBio = ois.readUTF();
             System.out.println("Updating 2");
             dbHandler.updateUserInfo(username, newName, newBio);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addFollow() {
+        try {
+            String streamerusername = ois.readUTF();
+
+            dbHandler.addFollow(username, streamerusername);
         }
         catch (Exception e) {
             e.printStackTrace();

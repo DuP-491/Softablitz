@@ -12,7 +12,9 @@ public enum ServerRequests {
     BROWSECATEGORY(8),
     STOPWATCHING(9),
     CHECKOUTUSER(10),
-    UPDATEUSERINFO(11);
+    UPDATEUSERINFO(11),
+    FOLLOW(12),
+    SUB(13);
 
     private int id;
 

@@ -231,6 +231,20 @@ public class DBHandler {
         }
     }
 
+    public synchronized void addFollow(String followerUsername, String streamerUsername) {
+        try {
+            String update = "insert into follows (followerusername, streamerusername) values(?,?)";
+            PreparedStatement pst = connection.prepareStatement(update);
+            pst.setString(1, followerUsername);
+            pst.setString(2, streamerUsername);
+
+            pst.executeUpdate();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     static int getSize(ResultSet rs) {
         int size = 0;
         try {

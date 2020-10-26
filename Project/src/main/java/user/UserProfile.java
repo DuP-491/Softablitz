@@ -21,6 +21,8 @@ public class UserProfile extends JFrame {
         profileOf = user;
         watcher = self;
 
+        setTitle(profileOf.getUsername() + ": Profile");
+
         if(user.getUsername().equals(self.getUsername())) {
             button1.setVisible(false);
             button2.setVisible(false);
@@ -52,6 +54,11 @@ public class UserProfile extends JFrame {
     private void saveChangesPressed(ActionEvent e) {
         // TODO add your code here
         watcher.updateUserInfo(textField1.getText(), textField2.getText()); //newName, newBio pair
+    }
+
+    private void followPressed(ActionEvent e) {
+        // TODO add your code here
+        watcher.follow(profileOf.getUsername());
     }
 
 
@@ -127,6 +134,7 @@ public class UserProfile extends JFrame {
 
         //---- button1 ----
         button1.setText("Follow");
+        button1.addActionListener(e -> followPressed(e));
         contentPane.add(button1, "cell 2 7");
 
         //---- button2 ----
