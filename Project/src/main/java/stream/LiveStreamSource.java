@@ -30,16 +30,6 @@ public class LiveStreamSource extends LiveStream {
         Thread t = new Thread(imageSender); t.start();
         t = new Thread(audioSender); t.start();
 
-        j.addWindowListener(
-                new WindowAdapter() {
-                    @Override
-                    public void windowClosing(WindowEvent e) {
-                        streamer.stopStreaming();
-                        super.windowClosing(e);
-                    }
-                }
-        );
-
         j.markAsStreamer(this.streamer);
 
     }

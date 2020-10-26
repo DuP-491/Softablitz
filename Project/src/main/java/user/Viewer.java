@@ -62,8 +62,18 @@ public class Viewer extends User implements Serializable {
     }
 
     public void stopWatching() {
-        currentlyWatching.stopWatching();
-        currentlyWatching = null;
+        try {
+            oos.writeInt(ServerRequests.STOPWATCHING.geti());
+            oos.flush();
+
+            System.out.println("Sent " + ServerRequests.STOPWATCHING.geti());
+
+            currentlyWatching.stopWatching();
+            currentlyWatching = null;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //will be called when viweing sub list or renewing/cancelling sub

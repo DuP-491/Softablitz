@@ -214,6 +214,16 @@ public class StreamWindow extends JFrame {
     public void markAsStreamer(Streamer self) {
         button3.setVisible(true);
         this.streamer = self;
+
+        addWindowListener(
+                new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        streamer.stopStreaming();
+                        super.windowClosing(e);
+                    }
+                }
+        );
     }
 
     public void markAsViewer(Viewer self) {
@@ -222,6 +232,17 @@ public class StreamWindow extends JFrame {
         button2.setVisible(true);
         textField1.setVisible(true);
         textField2.setVisible(true);
+
+        addWindowListener(
+                new WindowAdapter() {
+                    @Override
+                    public void windowClosing(WindowEvent e) {
+                        System.out.println("Madarchod "+ viewer.getUsername());
+                        viewer.stopWatching();
+                        super.windowClosing(e);
+                    }
+                }
+        );
 
         System.out.println("Marked viewer");
     }
@@ -237,6 +258,8 @@ public class StreamWindow extends JFrame {
     public void setMessageBlockText(String messageBlock) {
         textArea3.setText(messageBlock);
     }
+
+    public Viewer getViewer() { return this.viewer; }
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - Diptarag Ray Chaudhuri

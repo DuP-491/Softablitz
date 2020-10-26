@@ -50,9 +50,9 @@ public class User implements Serializable {
 
     public void end() {
         try {
-            socket.close();
             oos.close();
             ois.close();
+            socket.close();
 
         }
         catch (Exception e) {
