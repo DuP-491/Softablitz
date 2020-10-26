@@ -5,6 +5,7 @@ import connections.ServerRequests;
 import stream.Category;
 import stream.LiveStream;
 
+import javax.swing.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -90,6 +91,43 @@ public class Viewer extends User implements Serializable {
     public void sendMessage(String content) {
         System.out.println(content);
         currentlyWatching.sendMessage(new ChatMessage(this.getUsername(),content,0));
+    }
+
+    public int checkOutUser(String username) {
+        try {
+            oos.writeInt(ServerRequests.CHECKOUTUSER.geti());
+            oos.flush();
+
+            oos.writeUTF(username);
+            oos.flush();
+
+            User user = (User) ois.readObject();
+            UserProfile userProfile = new UserProfile(user, this);
+            userProfile.setVisible(true);
+            userProfile.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+            return 0;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void updateUserInfo(String newName, String newBio) {
+        try {
+            oos.writeInt(ServerRequests.UPDATEUSERINFO.geti());
+            oos.flush();
+
+            oos.writeUTF(newName);
+            oos.flush();
+
+            oos.writeUTF(newBio);
+            oos.flush();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

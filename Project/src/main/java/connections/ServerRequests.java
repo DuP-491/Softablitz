@@ -10,7 +10,9 @@ public enum ServerRequests {
     REGISTERUSER(6),
     LOGIN(7),
     BROWSECATEGORY(8),
-    STOPWATCHING(9);
+    STOPWATCHING(9),
+    CHECKOUTUSER(10),
+    UPDATEUSERINFO(11);
 
     private int id;
 

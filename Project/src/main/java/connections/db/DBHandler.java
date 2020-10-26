@@ -214,6 +214,23 @@ public class DBHandler {
         }
     }
 
+    public synchronized void updateUserInfo(String selfUsername, String newName, String newBio) {
+        try {
+            String update = "update users set name=?, bio=? where username=?";
+            PreparedStatement pst = connection.prepareStatement(update);
+
+            pst.setString(1, newName);
+            pst.setString(2,newBio);
+            pst.setString(3, selfUsername);
+
+            pst.executeUpdate();
+            System.out.println("info updated");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     static int getSize(ResultSet rs) {
         int size = 0;
         try {
