@@ -198,6 +198,38 @@ public class DBHandler {
         return null;
     }
 
+    public synchronized void setOnline(String username) {
+        try {
+            String update = "update users set status=? where username=?";
+            PreparedStatement pst = connection.prepareStatement(update);
+
+            pst.setInt(1, Status.ONLINE.geti());
+            pst.setString(2, username);
+            pst.executeUpdate();
+
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public synchronized void setOffline(String username) {
+        try {
+            String update = "update users set status=? where username=?";
+            PreparedStatement pst = connection.prepareStatement(update);
+
+            pst.setInt(1, Status.OFFLINE.geti());
+            pst.setString(2, username);
+            pst.executeUpdate();
+
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     static int getSize(ResultSet rs) {
         int size = 0;
         try {

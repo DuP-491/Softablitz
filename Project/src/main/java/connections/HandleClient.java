@@ -39,6 +39,8 @@ public class HandleClient extends Thread {
     }
 
     public void run() {
+        dbHandler.setOnline(username);
+
         while(running) {
             try {
                 int request = ois.readInt();
@@ -141,6 +143,8 @@ public class HandleClient extends Thread {
     //User method
     public void endConnection() {
         try {
+            dbHandler.setOffline(username);
+
             running = false;
             socket.close();
             oos.close();

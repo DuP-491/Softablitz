@@ -59,5 +59,4 @@ public class User implements Serializable {
             e.printStackTrace();
         }
     }
-
 }
