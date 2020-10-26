@@ -233,8 +233,16 @@ public class DBHandler {
 
     public synchronized void addFollow(String followerUsername, String streamerUsername) {
         try {
+            String query = "select * from follows where followerusername=? and streamerusername=?";
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setString(1,followerUsername);
+            pst.setString(2,streamerUsername);
+
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()) return; //If pair already exists dont have to do anything
+
             String update = "insert into follows (followerusername, streamerusername) values(?,?)";
-            PreparedStatement pst = connection.prepareStatement(update);
+            pst = connection.prepareStatement(update);
             pst.setString(1, followerUsername);
             pst.setString(2, streamerUsername);
 
