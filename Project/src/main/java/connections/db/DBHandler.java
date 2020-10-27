@@ -69,8 +69,8 @@ public class DBHandler {
                 //Check if followed streamer is live or not
                 String subquery = "Select * from streams where streamerusername=?";
                 PreparedStatement pss = connection.prepareStatement(subquery);
-                ps.setString(1, rs.getString("streamerusername"));
-                ResultSet rss = ps.executeQuery();
+                pss.setString(1, rs.getString("streamerusername"));
+                ResultSet rss = pss.executeQuery();
 
                 if(rss.next()) { ans[index++] = rss.getString("streamerusername"); }
             }

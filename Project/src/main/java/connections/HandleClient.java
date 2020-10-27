@@ -58,6 +58,7 @@ public class HandleClient extends Thread {
                 else if(ServerRequests.UPDATEUSERINFO.compare(request)) { updateUserInfo(); }
                 else if(ServerRequests.FOLLOW.compare(request)) { addFollow(); }
                 else if(ServerRequests.SUB.compare(request)) { }
+                else if(ServerRequests.GETNOTIFICATIONS.compare(request)) { getNotifications(); }
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -193,6 +194,19 @@ public class HandleClient extends Thread {
             dbHandler.addFollow(username, streamerusername);
         }
         catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getNotifications() {
+        try {
+            String[] streamers = dbHandler.getNotifications(username);
+
+            oos.writeObject(streamers);
+            oos.flush();
+
+        }
+        catch(Exception e) {
             e.printStackTrace();
         }
     }

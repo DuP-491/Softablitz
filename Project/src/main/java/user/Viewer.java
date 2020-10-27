@@ -144,4 +144,22 @@ public class Viewer extends User implements Serializable {
         }
     }
 
+    public String getNotifications() {
+        String block = "";
+        try {
+            oos.writeInt(ServerRequests.GETNOTIFICATIONS.geti());
+            oos.flush();
+
+            String[] streamers = (String[]) ois.readObject();
+            System.out.println(streamers.length);
+            for(int i = 0; i < streamers.length; i++) { if(streamers[i]==null) break; block += streamers[i] + " is livestreaming.\n"; }
+
+            return block;
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return block;
+    }
+
 }

@@ -31,6 +31,11 @@ public class HomePage extends JPanel {
         this.viewer = viewer;
         this.streamer = streamer;
         textArea1.setEditable(false);
+        textArea2.setEditable(false);
+    }
+
+    public void setNotifications(String block) {
+        textArea1.setText(block);
     }
 
     private void browsePressed(ActionEvent e) {
