@@ -262,7 +262,7 @@ public class DBHandler {
                 rs.beforeFirst();
             }
         } catch (Exception e) {
-        }
+        } 
         return size;
     }
 }

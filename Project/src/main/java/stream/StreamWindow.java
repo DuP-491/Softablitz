@@ -20,6 +20,9 @@ public class StreamWindow extends JFrame {
     private Streamer streamer;
     private Viewer viewer;
     
+    private boolean paused;
+    private boolean muted;
+    
     public StreamWindow() {
 
         initComponents();
@@ -46,6 +49,37 @@ public class StreamWindow extends JFrame {
         viewer.sendMessage(text);
     }
 
+    private void PausePressed(ActionEvent e) {
+        // TODO add your code here
+        System.out.println(paused);
+        if(paused) {
+            paused = false;
+            button4.setText("Pause");
+            if(viewer != null) { viewer.unpause(); }
+        }
+        else {
+            paused = true;
+            button4.setText("Resume");
+            if(viewer != null) { viewer.pause(); }
+        }
+    }
+
+    private void mutePressed(ActionEvent e) {
+        // TODO add your code here
+        if(muted) {
+            muted = false;
+            button5.setText("Mute");
+            if(viewer != null) { viewer.unmute(); }
+            if(streamer != null) { streamer.unmute(); }
+        }
+        else {
+            muted = true;
+            button5.setText("Unmute");
+            if(viewer != null) { viewer.mute(); }
+            if(streamer != null) { streamer.mute(); }
+        }
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Diptarag Ray Chaudhuri
@@ -61,6 +95,8 @@ public class StreamWindow extends JFrame {
         textArea3 = new JTextArea();
         label4 = new JLabel();
         button3 = new JButton();
+        button4 = new JButton();
+        button5 = new JButton();
         textField2 = new JTextField();
         button2 = new JButton();
 
@@ -69,6 +105,10 @@ public class StreamWindow extends JFrame {
         contentPane.setLayout(new MigLayout(
             "hidemode 3",
             // columns
+            "[fill]" +
+            "[fill]" +
+            "[fill]" +
+            "[fill]" +
             "[fill]" +
             "[fill]" +
             "[fill]" +
@@ -146,13 +186,13 @@ public class StreamWindow extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.
-            swing.border.EmptyBorder(0,0,0,0), "JF\u006frmDes\u0069gner \u0045valua\u0074ion",javax.swing.border
-            .TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("D\u0069alog"
-            ,java.awt.Font.BOLD,12),java.awt.Color.red),panel1. getBorder
-            ()));panel1. addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java
-            .beans.PropertyChangeEvent e){if("\u0062order".equals(e.getPropertyName()))throw new RuntimeException
-            ();}});
+            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing
+            . border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn" , javax. swing .border . TitledBorder
+            . CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java. awt .Font ( "Dia\u006cog", java .
+            awt . Font. BOLD ,12 ) ,java . awt. Color .red ) ,panel1. getBorder () ) )
+            ; panel1. addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
+            ) { if( "\u0062ord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } )
+            ;
             panel1.setLayout(new MigLayout(
                 "hidemode 3",
                 // columns
@@ -193,19 +233,29 @@ public class StreamWindow extends JFrame {
             }
             panel1.add(scrollPane3, "cell 0 4 5 1,width 500:500:500,height 200:200:200");
         }
-        contentPane.add(panel1, "cell 23 1 21 5,height 500:500:500");
-        contentPane.add(label4, "cell 1 2 13 1");
+        contentPane.add(panel1, "cell 27 1 21 5,height 500:500:500");
+        contentPane.add(label4, "cell 1 2 17 1");
 
         //---- button3 ----
         button3.setText("Change Mode");
         button3.addActionListener(e -> changeModePressed(e));
         contentPane.add(button3, "cell 1 6");
-        contentPane.add(textField2, "cell 23 6 18 1,width 420:420:420");
+
+        //---- button4 ----
+        button4.setText("Pause");
+        button4.addActionListener(e -> PausePressed(e));
+        contentPane.add(button4, "cell 6 6");
+
+        //---- button5 ----
+        button5.setText("Mute");
+        button5.addActionListener(e -> mutePressed(e));
+        contentPane.add(button5, "cell 11 6");
+        contentPane.add(textField2, "cell 27 6 18 1,width 420:420:420");
 
         //---- button2 ----
         button2.setText("Post");
         button2.addActionListener(e -> allUsersMessagePressed(e));
-        contentPane.add(button2, "cell 23 6 18 1,width 80:80:80");
+        contentPane.add(button2, "cell 27 6 18 1,width 80:80:80");
         pack();
         setLocationRelativeTo(getOwner());
         // JFormDesigner - End of component initialization  //GEN-END:initComponents
@@ -213,6 +263,8 @@ public class StreamWindow extends JFrame {
     
     public void markAsStreamer(Streamer self) {
         button3.setVisible(true);
+        button4.setVisible(false);
+
         this.streamer = self;
 
         addWindowListener(
@@ -260,6 +312,8 @@ public class StreamWindow extends JFrame {
     }
 
     public Viewer getViewer() { return this.viewer; }
+    
+    
 
     // JFormDesigner - Variables declaration - DO NOT MODIFY  //GEN-BEGIN:variables
     // Generated using JFormDesigner Evaluation license - Diptarag Ray Chaudhuri
@@ -275,6 +329,8 @@ public class StreamWindow extends JFrame {
     private JTextArea textArea3;
     private JLabel label4;
     private JButton button3;
+    private JButton button4;
+    private JButton button5;
     private JTextField textField2;
     private JButton button2;
     // JFormDesigner - End of variables declaration  //GEN-END:variables

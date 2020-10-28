@@ -162,4 +162,20 @@ public class Viewer extends User implements Serializable {
         return block;
     }
 
+    public void unpause() {
+        currentlyWatching.unpause();
+    }
+
+    public void pause() {
+        currentlyWatching.pause();
+    }
+
+    public void unmute() {
+        currentlyWatching.unmute();
+    }
+
+    public void mute() {
+        currentlyWatching.mute();
+    }
+
 }
