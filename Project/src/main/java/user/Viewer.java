@@ -130,12 +130,15 @@ public class Viewer extends User implements Serializable {
         }
     }
 
-    public void follow(String streamerUsername) {
+    public void follow(String streamerUsername, int bit) {
         try {
             oos.writeInt(ServerRequests.FOLLOW.geti());
             oos.flush();
 
             oos.writeUTF(streamerUsername);
+            oos.flush();
+
+            oos.writeInt(bit);
             oos.flush();
 
         }
@@ -160,6 +163,25 @@ public class Viewer extends User implements Serializable {
             e.printStackTrace();
         }
         return block;
+    }
+
+    public boolean[] getUserPairInfo(User user) {
+        boolean[] ans;
+        try {
+            oos.writeInt(ServerRequests.GETUSERPAIRINFO.geti());
+            oos.flush();
+
+            oos.writeUTF(user.getUsername());
+            oos.flush();
+
+            ans = (boolean[]) ois.readObject();
+            return ans;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        ans = new boolean[]{false, false};
+        return ans;
     }
 
     public void unpause() {

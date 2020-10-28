@@ -231,26 +231,66 @@ public class DBHandler {
         }
     }
 
-    public synchronized void addFollow(String followerUsername, String streamerUsername) {
+    public synchronized void addFollow(String followerUsername, String streamerUsername, int bit) {
         try {
-            String query = "select * from follows where followerusername=? and streamerusername=?";
-            PreparedStatement pst = connection.prepareStatement(query);
-            pst.setString(1,followerUsername);
-            pst.setString(2,streamerUsername);
+            if(bit == 1) { //Follow demand
+                String query = "select * from follows where followerusername=? and streamerusername=?";
+                PreparedStatement pst = connection.prepareStatement(query);
+                pst.setString(1, followerUsername);
+                pst.setString(2, streamerUsername);
 
-            ResultSet rs = pst.executeQuery();
-            if(rs.next()) return; //If pair already exists dont have to do anything
+                ResultSet rs = pst.executeQuery();
+                if (rs.next()) return; //If pair already exists dont have to do anything
 
-            String update = "insert into follows (followerusername, streamerusername) values(?,?)";
-            pst = connection.prepareStatement(update);
-            pst.setString(1, followerUsername);
-            pst.setString(2, streamerUsername);
+                String update = "insert into follows (followerusername, streamerusername) values(?,?)";
+                pst = connection.prepareStatement(update);
+                pst.setString(1, followerUsername);
+                pst.setString(2, streamerUsername);
 
-            pst.executeUpdate();
+                pst.executeUpdate();
+            }
+            else { //Unfollow demand
+                String query = "delete from follows where followerusername=? and streamerusername=?";
+                PreparedStatement pst = connection.prepareStatement(query);
+
+                pst.setString(1, followerUsername);
+                pst.setString(2, streamerUsername);
+
+                pst.execute();
+            }
         }
         catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public synchronized boolean[] getUserPairInfo(String user1, String user2) {
+        boolean[] ans = new boolean[2];  //0 stores followed, 1 stores subbed
+        try {
+
+            String query = "select * from follows where followerusername=? and streamerusername=?";
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setString(1,user1);
+            pst.setString(2,user2);
+            ResultSet rs = pst.executeQuery();
+
+            if(rs.next()) ans[0] = true; else ans[0] = false;
+
+            query = "select * from subs where followerusername=? and streamerusername=?";
+            pst = connection.prepareStatement(query);
+            pst.setString(1,user1);
+            pst.setString(2,user2);
+            rs = pst.executeQuery();
+
+            if(rs.next()) ans[1] = true; else ans[1] = false;
+
+            return ans;
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return ans;
     }
 
     static int getSize(ResultSet rs) {

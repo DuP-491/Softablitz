@@ -16,10 +16,18 @@ public class UserProfile extends JFrame {
     private User profileOf;
     private Viewer watcher;
 
+    private boolean follows;
+    private boolean subbed;
+
     public UserProfile(User user, Viewer self) {
         initComponents();
         profileOf = user;
         watcher = self;
+
+        follows = false;
+        subbed = false;
+
+        getUserPairInfo();
 
         setTitle(profileOf.getUsername() + ": Profile");
 
@@ -51,6 +59,16 @@ public class UserProfile extends JFrame {
         label5.setText(user.getName());
     }
 
+    public void getUserPairInfo() {
+        boolean[] ans = watcher.getUserPairInfo(profileOf);
+
+        follows = ans[0];
+        subbed = ans[1];
+
+        if(follows) button1.setText("Unfollow"); else button1.setText("Follow");
+        if(subbed) button2.setText("Unsub"); else button2.setText("Subscribe");
+    }
+
     private void saveChangesPressed(ActionEvent e) {
         // TODO add your code here
         watcher.updateUserInfo(textField1.getText(), textField2.getText()); //newName, newBio pair
@@ -58,7 +76,10 @@ public class UserProfile extends JFrame {
 
     private void followPressed(ActionEvent e) {
         // TODO add your code here
-        watcher.follow(profileOf.getUsername());
+        if(follows) watcher.follow(profileOf.getUsername(), 0); //Unfollow
+        else watcher.follow(profileOf.getUsername(), 1); //Follow
+
+        getUserPairInfo();
     }
 
 
