@@ -7,25 +7,27 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class ImageReciever extends Thread {
-    public static int HEADER_SIZE = 8;
+    public static int HEADER_SIZE = 16;
     public static int SESSION_START = 128;
     public static int SESSION_END = 64;
-    private static int DATAGRAM_MAX_SIZE = 65507;
+    private static final int DATAGRAM_MAX_SIZE = 65507;
 
     public String IP_ADDRESS;
     public static int PORT = 4444;
 
     public BufferedImage currentFrame;
-
+    public long currentTimestamp;
     private boolean running;
 
     public ImageReciever(String id, LiveStream stream) {
         try {
             IP_ADDRESS = id;
             running = true;
-        }catch (Exception e) {
+        } catch (Exception e) {
             //e.printStackTrace();
         }
     }
@@ -33,8 +35,7 @@ public class ImageReciever extends Thread {
     public void stopThread() {
         try {
             running = false;
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -71,11 +72,12 @@ public class ImageReciever extends Thread {
                 /* Read header infomation */
                 short session = (short) (data[1] & 0xff);
                 short slices = (short) (data[2] & 0xff);
-                int maxPacketSize = (int) ((data[3] & 0xff) << 8 | (data[4] & 0xff)); // mask
+                int maxPacketSize = (data[3] & 0xff) << 8 | (data[4] & 0xff); // mask
 
                 short slice = (short) (data[5] & 0xff);
-                int size = (int) ((data[6] & 0xff) << 8 | (data[7] & 0xff)); // mask
-
+                int size = (data[6] & 0xff) << 8 | (data[7] & 0xff); // mask
+                byte[] timeStampArray = Arrays.copyOfRange(data, 8, 16);
+                long timeStamp = ByteBuffer.wrap(timeStampArray).getLong();
                 /* If SESSION_START falg is set, setup start values */
                 if ((data[0] & SESSION_START) == SESSION_START) {
                     if (session != currentSession) {
@@ -102,6 +104,9 @@ public class ImageReciever extends Thread {
                 if (slicesStored == slices) {
                     ByteArrayInputStream bis = new ByteArrayInputStream(imageData);
                     currentFrame = ImageIO.read(bis);
+                    currentTimestamp = timeStamp;
+//                    System.out.println("image timeStamp "+timeStamp);
+
                 }
 
             }
