@@ -4,6 +4,7 @@ import connections.db.DBHandler;
 import stream.Category;
 import stream.LiveStream;
 import user.Status;
+import user.User;
 
 import java.io.ObjectOutputStream;
 import java.io.ObjectInputStream;
@@ -53,6 +54,11 @@ public class HandleClient extends Thread {
                 else if(ServerRequests.REMOVESTREAMFROMDB.compare(request)) { removeStreamfromDB(); }
                 else if(ServerRequests.BROWSECATEGORY.compare(request)) { getStreamsByCategory(); }
                 else if(ServerRequests.STOPWATCHING.compare(request)) { stopWatching(); }
+                else if(ServerRequests.CHECKOUTUSER.compare(request)) { getUser(); }
+                else if(ServerRequests.UPDATEUSERINFO.compare(request)) { updateUserInfo(); }
+                else if(ServerRequests.FOLLOW.compare(request)) { addFollow(); }
+                else if(ServerRequests.SUB.compare(request)) { }
+                else if(ServerRequests.GETNOTIFICATIONS.compare(request)) { getNotifications(); }
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -149,6 +155,56 @@ public class HandleClient extends Thread {
         try {
             dbHandler.setStatus(username, Status.ONLINE);
             System.out.println("stopped watching serverside");
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getUser() {
+        try {
+            String cUsername = ois.readUTF();
+            User user = dbHandler.getUserByUsername(cUsername);
+
+            oos.writeObject(user);
+            oos.flush();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateUserInfo() {
+        try {
+            System.out.println("Updating");
+            String newName = ois.readUTF();
+            String newBio = ois.readUTF();
+            System.out.println("Updating 2");
+            dbHandler.updateUserInfo(username, newName, newBio);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addFollow() {
+        try {
+            String streamerusername = ois.readUTF();
+
+            dbHandler.addFollow(username, streamerusername);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void getNotifications() {
+        try {
+            String[] streamers = dbHandler.getNotifications(username);
+
+            oos.writeObject(streamers);
+            oos.flush();
+
         }
         catch(Exception e) {
             e.printStackTrace();

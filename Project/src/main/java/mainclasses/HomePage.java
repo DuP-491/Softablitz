@@ -31,6 +31,11 @@ public class HomePage extends JPanel {
         this.viewer = viewer;
         this.streamer = streamer;
         textArea1.setEditable(false);
+        textArea2.setEditable(false);
+    }
+
+    public void setNotifications(String block) {
+        textArea1.setText(block);
     }
 
     private void browsePressed(ActionEvent e) {
@@ -66,6 +71,11 @@ public class HomePage extends JPanel {
         prestream.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
     }
 
+    private void checkOutPressed(ActionEvent e) {
+        // TODO add your code here
+        viewer.checkOutUser(textField3.getText());
+    }
+
     private void initComponents() {
         // JFormDesigner - Component initialization - DO NOT MODIFY  //GEN-BEGIN:initComponents
         // Generated using JFormDesigner Evaluation license - Diptarag Ray Chaudhuri
@@ -81,6 +91,9 @@ public class HomePage extends JPanel {
         label4 = new JLabel();
         scrollPane2 = new JScrollPane();
         textArea2 = new JTextArea();
+        label7 = new JLabel();
+        textField3 = new JTextField();
+        button5 = new JButton();
         label5 = new JLabel();
         textField2 = new JTextField();
         button3 = new JButton();
@@ -88,13 +101,11 @@ public class HomePage extends JPanel {
         button4 = new JButton();
 
         //======== this ========
-        setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.
-        swing.border.EmptyBorder(0,0,0,0), "JF\u006frmD\u0065sig\u006eer \u0045val\u0075ati\u006fn",javax.swing.border
-        .TitledBorder.CENTER,javax.swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog"
-        ,java.awt.Font.BOLD,12),java.awt.Color.red), getBorder
-        ())); addPropertyChangeListener(new java.beans.PropertyChangeListener(){@Override public void propertyChange(java
-        .beans.PropertyChangeEvent e){if("\u0062ord\u0065r".equals(e.getPropertyName()))throw new RuntimeException
-        ();}});
+        setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new javax . swing. border .EmptyBorder ( 0
+        , 0 ,0 , 0) ,  "JFor\u006dDesi\u0067ner \u0045valu\u0061tion" , javax. swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM
+        , new java. awt .Font ( "Dia\u006cog", java .awt . Font. BOLD ,12 ) ,java . awt. Color .red ) ,
+         getBorder () ) );  addPropertyChangeListener( new java. beans .PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e
+        ) { if( "bord\u0065r" .equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
         setLayout(new MigLayout(
             "hidemode 3",
             // columns
@@ -165,6 +176,16 @@ public class HomePage extends JPanel {
         }
         add(scrollPane2, "cell 1 9 2 1,width 400:400:400,height 200:200:200");
 
+        //---- label7 ----
+        label7.setText("Check out User by Handle:");
+        add(label7, "cell 1 12");
+        add(textField3, "cell 2 12 4 1");
+
+        //---- button5 ----
+        button5.setText("Check out");
+        button5.addActionListener(e -> checkOutPressed(e));
+        add(button5, "cell 6 12");
+
         //---- label5 ----
         label5.setText("Start watching streamer by Handle");
         add(label5, "cell 1 14");
@@ -202,6 +223,9 @@ public class HomePage extends JPanel {
     private JLabel label4;
     private JScrollPane scrollPane2;
     private JTextArea textArea2;
+    private JLabel label7;
+    private JTextField textField3;
+    private JButton button5;
     private JLabel label5;
     private JTextField textField2;
     private JButton button3;

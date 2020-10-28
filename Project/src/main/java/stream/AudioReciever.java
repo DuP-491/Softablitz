@@ -18,6 +18,7 @@ public class AudioReciever extends Thread {
     private byte[] data;
 
     private boolean running;
+    private boolean isMuted;
     private LiveStream stream;
 
     public AudioReciever(String group, LiveStream stream) {
@@ -32,8 +33,17 @@ public class AudioReciever extends Thread {
         }
     }
 
+    public void mute() {
+        isMuted = true;
+    }
+
+    public void unmute() {
+        isMuted = false;
+    }
+
     public void recieveAndPlay() {
         try {
+            if(isMuted) return;
             byte[] buffer = new byte[CHUNK_SIZE];
             dpacket = new DatagramPacket(buffer, buffer.length);
             msocket.receive(dpacket);

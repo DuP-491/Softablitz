@@ -73,6 +73,24 @@ new FormModel {
 				"value": "cell 1 9 2 1,width 400:400:400,height 200:200:200"
 			} )
 			add( new FormComponent( "javax.swing.JLabel" ) {
+				name: "label7"
+				"text": "Check out User by Handle:"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 1 12"
+			} )
+			add( new FormComponent( "javax.swing.JTextField" ) {
+				name: "textField3"
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 2 12 4 1"
+			} )
+			add( new FormComponent( "javax.swing.JButton" ) {
+				name: "button5"
+				"text": "Check out"
+				addEvent( new FormEvent( "java.awt.event.ActionListener", "actionPerformed", "checkOutPressed", true ) )
+			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
+				"value": "cell 6 12"
+			} )
+			add( new FormComponent( "javax.swing.JLabel" ) {
 				name: "label5"
 				"text": "Start watching streamer by Handle"
 			}, new FormLayoutConstraints( class net.miginfocom.layout.CC ) {
@@ -105,7 +123,7 @@ new FormModel {
 			} )
 		}, new FormLayoutConstraints( null ) {
 			"location": new java.awt.Point( 0, 0 )
-			"size": new java.awt.Dimension( 610, 585 )
+			"size": new java.awt.Dimension( 610, 635 )
 		} )
 	}
 }

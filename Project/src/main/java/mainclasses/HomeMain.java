@@ -23,10 +23,13 @@ public class HomeMain extends Thread {
     public void run() {
         JFrame frame = new JFrame();
         HomePage hp = new HomePage(selfViewer, selfStreamer);
+        hp.setNotifications(selfViewer.getNotifications()); //Set notificaitons
+
         frame.add(hp);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         frame.setSize(800,600);
+
         frame.setTitle("Revenge Live: HomePage for " + selfViewer.getUsername());
 
         frame.addWindowListener(

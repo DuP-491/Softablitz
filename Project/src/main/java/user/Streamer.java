@@ -73,4 +73,12 @@ public class Streamer extends User {
     public LiveStream getStream() {
         return this.myStream;
     }
+
+    public void unmute() {
+        myStream.unmute();
+    }
+
+    public void mute() {
+        myStream.mute();
+    }
 }

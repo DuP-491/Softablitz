@@ -69,8 +69,8 @@ public class DBHandler {
                 //Check if followed streamer is live or not
                 String subquery = "Select * from streams where streamerusername=?";
                 PreparedStatement pss = connection.prepareStatement(subquery);
-                ps.setString(1, rs.getString("streamerusername"));
-                ResultSet rss = ps.executeQuery();
+                pss.setString(1, rs.getString("streamerusername"));
+                ResultSet rss = pss.executeQuery();
 
                 if(rss.next()) { ans[index++] = rss.getString("streamerusername"); }
             }
@@ -214,6 +214,45 @@ public class DBHandler {
         }
     }
 
+    public synchronized void updateUserInfo(String selfUsername, String newName, String newBio) {
+        try {
+            String update = "update users set name=?, bio=? where username=?";
+            PreparedStatement pst = connection.prepareStatement(update);
+
+            pst.setString(1, newName);
+            pst.setString(2,newBio);
+            pst.setString(3, selfUsername);
+
+            pst.executeUpdate();
+            System.out.println("info updated");
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public synchronized void addFollow(String followerUsername, String streamerUsername) {
+        try {
+            String query = "select * from follows where followerusername=? and streamerusername=?";
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setString(1,followerUsername);
+            pst.setString(2,streamerUsername);
+
+            ResultSet rs = pst.executeQuery();
+            if(rs.next()) return; //If pair already exists dont have to do anything
+
+            String update = "insert into follows (followerusername, streamerusername) values(?,?)";
+            pst = connection.prepareStatement(update);
+            pst.setString(1, followerUsername);
+            pst.setString(2, streamerUsername);
+
+            pst.executeUpdate();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     static int getSize(ResultSet rs) {
         int size = 0;
         try {
@@ -223,7 +262,7 @@ public class DBHandler {
                 rs.beforeFirst();
             }
         } catch (Exception e) {
-        }
+        } 
         return size;
     }
 }
