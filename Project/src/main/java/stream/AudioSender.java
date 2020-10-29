@@ -47,18 +47,23 @@ public class AudioSender extends Thread {
     }
 
     public void sendAudio() {
-        if(isMuted) return;
-        try {
-            msocket = new MulticastSocket();
-            msocket.setTimeToLive(2);
-            long timeStamp = System.currentTimeMillis();
-            byte[] timeStampArray = ByteBuffer.allocate(8).putLong(timeStamp).array();
-            System.arraycopy(timeStampArray, 0, data, 0, HEADER_SIZE);
-            dpacket = new DatagramPacket(data, HEADER_SIZE + numBytesRead, ia, PORT);
-            msocket.send(dpacket);
-        } catch (Exception e) {
-            // e.printStackTrace();
-        }
+            try {
+                msocket = new MulticastSocket();
+                msocket.setTimeToLive(2);
+                long timeStamp = System.currentTimeMillis();
+                byte[] timeStampArray = ByteBuffer.allocate(8).putLong(timeStamp).array();
+               if(isMuted){
+                   for (int i = 8; i <data.length ; i++) {
+                       data[i]=0;
+                   }
+               }
+                System.arraycopy(timeStampArray, 0, data, 0, HEADER_SIZE);
+                dpacket = new DatagramPacket(data, HEADER_SIZE + numBytesRead, ia, PORT);
+                msocket.send(dpacket);
+            } catch (Exception e) {
+                // e.printStackTrace();
+            }
+
     }
 
     public void stopThread() {
