@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.net.*;
+import java.nio.ByteBuffer;
 
 public class ImageSender extends Thread {
 
@@ -17,7 +18,7 @@ public class ImageSender extends Thread {
     private Robot robot;
     private LiveStream stream;
 
-    public static int HEADER_SIZE = 8;
+    public static int HEADER_SIZE = 16;
     public static int MAX_PACKETS = 255;
     public static int SESSION_START = 128;
     public static int SESSION_END = 64;
@@ -132,7 +133,8 @@ public class ImageSender extends Thread {
                     System.out.println("Image is too large to be transmitted!");
                     continue;
                 }
-
+                long timeStamp=System.currentTimeMillis();
+                byte[] timeStampArray=ByteBuffer.allocate(8).putLong(timeStamp).array();
                 for (int i = 0; i <= packets; i++) {
                     int flags = 0;
                     flags = i == 0 ? flags | SESSION_START : flags;
@@ -149,6 +151,14 @@ public class ImageSender extends Thread {
                     data[5] = (byte) i;
                     data[6] = (byte) (size >> 8);
                     data[7] = (byte) size;
+                    data[8]=timeStampArray[0];
+                    data[9]=timeStampArray[1];
+                    data[10]=timeStampArray[2];
+                    data[11]=timeStampArray[3];
+                    data[12]=timeStampArray[4];
+                    data[13]=timeStampArray[5];
+                    data[14]=timeStampArray[6];
+                    data[15]=timeStampArray[7];
 
                     System.arraycopy(imageByteArray, i * DATAGRAM_MAX_SIZE, data, HEADER_SIZE, size);
                     this.sendImage(data, this.IP_ADDRESS, PORT);

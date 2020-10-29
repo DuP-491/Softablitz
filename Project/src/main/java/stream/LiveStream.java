@@ -5,9 +5,11 @@ import chat.ChatMessage;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
+import java.util.Queue;
 
 import chat.MessageReciever;
 import chat.MessageSender;
@@ -15,10 +17,14 @@ import test.connections.Message;
 import user.Streamer;
 import user.Viewer;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 
 public class LiveStream implements Runnable, Serializable {
+    static {
+        ImageIO.setUseCache(false);
+    }
     protected int viewCount;
     protected String streamerUsername;
     protected LocalDateTime startedAtTime;
@@ -50,6 +56,7 @@ public class LiveStream implements Runnable, Serializable {
 
 
     public LiveStream(String title, Category cat, int id, String streamerUsername) {
+
         this.ID = id;
         this.streamerUsername = streamerUsername;
         this.category = cat;
@@ -152,8 +159,18 @@ public class LiveStream implements Runnable, Serializable {
 
     public void update() {
         try {
-            if(!isPaused) j.setIcon(imageReciever.currentFrame);
 
+           if(!isPaused){
+               long a=audioReciever.getCurrentTimestamp();
+              long b=imageReciever.WhatsTheLatestTimeStamp();
+              if(a>=b){
+                  j.setIcon(imageReciever.getLatestImage());
+              }
+           }
+          else{
+              imageReciever.getLatestImage();
+          }
+          
         } catch (Exception e) {
             //System.out.println("Cant get currentframe");
         }
@@ -191,10 +208,10 @@ public class LiveStream implements Runnable, Serializable {
     }
 
     public void mute() {
-        audioReciever.mute();
+        isMuted=true;audioReciever.mute();
     }
 
     public void unmute() {
-        audioReciever.unmute();
+        isMuted=false;audioReciever.unmute();
     }
 }
