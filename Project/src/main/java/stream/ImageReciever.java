@@ -1,6 +1,7 @@
 package stream;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -124,6 +125,7 @@ public class ImageReciever extends Thread {
                     if(currentFrame!=null){
                         synchronized (imageSampleQueue){
                             imageSampleQueue.add(new ImageSample(currentFrame,currentTimestamp));
+
                         }
                     }
 
@@ -148,13 +150,17 @@ public class ImageReciever extends Thread {
     }
 
     public long WhatsTheLatestTimeStamp(){
-        synchronized (imageSampleQueue) {
-            return imageSampleQueue.peek().timestamp;
-        }
+//        synchronized (imageSampleQueue) {
+//            return imageSampleQueue.peek().timestamp;
+//        }
+        return currentTimestamp;
     }
+
     public BufferedImage getLatestImage(){
         synchronized (imageSampleQueue) {
-            return imageSampleQueue.remove().image;
+            BufferedImage image=imageSampleQueue.remove().image;
+            currentTimestamp=imageSampleQueue.peek().timestamp;
+            return image;
         }
     }
 }

@@ -21,7 +21,7 @@ public class AudioReciever extends Thread {
         return currentTimestamp;
     }
 
-    public static int CHUNK_SIZE = 128;
+    public static int CHUNK_SIZE = 1024;
     private byte[] data;
     private byte[] buffer=new byte[CHUNK_SIZE+HEADER_SIZE];
     private boolean running;

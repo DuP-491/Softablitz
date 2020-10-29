@@ -15,7 +15,7 @@ public class AudioSender extends Thread {
     private final static int HEADER_SIZE = 8;
     TargetDataLine microphone;
 
-    public static int CHUNK_SIZE = 128;
+    public static int CHUNK_SIZE = 1024;
     private byte[] data;
 
     private boolean running;

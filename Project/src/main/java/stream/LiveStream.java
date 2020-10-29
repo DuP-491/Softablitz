@@ -17,10 +17,14 @@ import test.connections.Message;
 import user.Streamer;
 import user.Viewer;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 
 
 public class LiveStream implements Runnable, Serializable {
+    static {
+        ImageIO.setUseCache(false);
+    }
     protected int viewCount;
     protected String streamerUsername;
     protected LocalDateTime startedAtTime;
@@ -149,7 +153,9 @@ public class LiveStream implements Runnable, Serializable {
 
     public void update() {
         try {
-            if(audioReciever.getCurrentTimestamp()>=imageReciever.WhatsTheLatestTimeStamp()){
+            long a=audioReciever.getCurrentTimestamp();
+            long b=imageReciever.WhatsTheLatestTimeStamp();
+            if(a>=b){
                 j.setIcon(imageReciever.getLatestImage());
             }
 
