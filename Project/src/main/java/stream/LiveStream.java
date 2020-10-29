@@ -159,6 +159,7 @@ public class LiveStream implements Runnable, Serializable {
 
     public void update() {
         try {
+
            if(!isPaused){
                long a=audioReciever.getCurrentTimestamp();
               long b=imageReciever.WhatsTheLatestTimeStamp();
@@ -207,10 +208,10 @@ public class LiveStream implements Runnable, Serializable {
     }
 
     public void mute() {
-        audioReciever.mute();
+        isMuted=true;audioReciever.mute();
     }
 
     public void unmute() {
-        audioReciever.unmute();
+        isMuted=false;audioReciever.unmute();
     }
 }

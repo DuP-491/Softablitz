@@ -50,7 +50,7 @@ public class AudioReciever extends Thread {
 
     public void recieveAndPlay() {
         try {
-            if(isMuted) return;
+//            if(isMuted) return;
             dpacket = new DatagramPacket(buffer, buffer.length);
             msocket.receive(dpacket);
             data = dpacket.getData();
