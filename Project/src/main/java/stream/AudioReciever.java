@@ -4,6 +4,8 @@ import javax.sound.sampled.*;
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
+import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 public class AudioReciever extends Thread {
     private String group;
@@ -11,12 +13,17 @@ public class AudioReciever extends Thread {
     private DatagramPacket dpacket;
     private InetAddress ia;
     private static int PORT = 4444;
-
+    private final static int HEADER_SIZE = 8;
     SourceDataLine speakers;
+    private long currentTimestamp;
+
+    public long getCurrentTimestamp() {
+        return currentTimestamp;
+    }
 
     public static int CHUNK_SIZE = 1024;
     private byte[] data;
-
+    private byte[] buffer=new byte[CHUNK_SIZE+HEADER_SIZE];
     private boolean running;
     private boolean isMuted;
     private LiveStream stream;
@@ -44,17 +51,20 @@ public class AudioReciever extends Thread {
     public void recieveAndPlay() {
         try {
             if(isMuted) return;
-            byte[] buffer = new byte[CHUNK_SIZE];
             dpacket = new DatagramPacket(buffer, buffer.length);
             msocket.receive(dpacket);
             data = dpacket.getData();
+            byte[] timeStampArray= Arrays.copyOfRange(data, 0, 8);
+            long timeStamp = ByteBuffer.wrap(timeStampArray).getLong();
+            currentTimestamp=timeStamp;
+//            System.out.println("audio timeStamp"+timeStamp);
         }
         catch(Exception e) {
             //e.printStackTrace();
             System.out.println("Recieving 1 me dikkat");
         }
         try {
-            speakers.write(data,0,CHUNK_SIZE);
+            speakers.write(data,HEADER_SIZE,CHUNK_SIZE);
         }
         catch (Exception e) {
             //e.printStackTrace();
