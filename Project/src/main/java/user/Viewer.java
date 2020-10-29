@@ -130,12 +130,43 @@ public class Viewer extends User implements Serializable {
         }
     }
 
-    public void follow(String streamerUsername) {
+    public void follow(String streamerUsername, int bit) {
         try {
             oos.writeInt(ServerRequests.FOLLOW.geti());
             oos.flush();
 
             oos.writeUTF(streamerUsername);
+            oos.flush();
+
+            oos.writeInt(bit);
+            oos.flush();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sub(String streamerUsername, int bit) {
+        try {
+            oos.writeInt(ServerRequests.SUB.geti());
+            oos.flush();
+
+            oos.writeUTF(streamerUsername);
+            oos.flush();
+
+            oos.writeInt(bit);
+            oos.flush();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addMoney() {
+        try {
+            oos.writeInt(ServerRequests.ADDMONEY.geti());
             oos.flush();
 
         }
@@ -160,6 +191,25 @@ public class Viewer extends User implements Serializable {
             e.printStackTrace();
         }
         return block;
+    }
+
+    public int[] getUserPairInfo(User user) {
+        int[] ans;
+        try {
+            oos.writeInt(ServerRequests.GETUSERPAIRINFO.geti());
+            oos.flush();
+
+            oos.writeUTF(user.getUsername());
+            oos.flush();
+
+            ans = (int[]) ois.readObject();
+            return ans;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        ans = new int[]{0, 0, 0};
+        return ans;
     }
 
     public void unpause() {

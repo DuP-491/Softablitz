@@ -15,7 +15,9 @@ public enum ServerRequests {
     UPDATEUSERINFO(11),
     FOLLOW(12),
     SUB(13),
-    GETNOTIFICATIONS(14);
+    GETNOTIFICATIONS(14),
+    GETUSERPAIRINFO(15),
+    ADDMONEY(16);
 
     private int id;
 

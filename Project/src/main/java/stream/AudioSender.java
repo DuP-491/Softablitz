@@ -36,7 +36,8 @@ public class AudioSender extends Thread {
             this.group = group;
             ia = InetAddress.getByName(group);
             running = true;
-        } catch (Exception e) {
+        }
+        catch(Exception e) {
             // e.printStackTrace();
         }
     }

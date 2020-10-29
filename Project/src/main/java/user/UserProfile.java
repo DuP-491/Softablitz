@@ -16,10 +16,20 @@ public class UserProfile extends JFrame {
     private User profileOf;
     private Viewer watcher;
 
+    private int follows;
+    private int subbed;
+    private int balance;
+
     public UserProfile(User user, Viewer self) {
         initComponents();
         profileOf = user;
         watcher = self;
+
+        follows = 0;
+        subbed = 0;
+        balance = 0;
+
+        getUserPairInfo();
 
         setTitle(profileOf.getUsername() + ": Profile");
 
@@ -51,6 +61,18 @@ public class UserProfile extends JFrame {
         label5.setText(user.getName());
     }
 
+    public void getUserPairInfo() {
+        int[] ans = watcher.getUserPairInfo(profileOf);
+
+        follows = ans[0];
+        subbed = ans[1];
+        balance = ans[2];
+
+        if(follows == 1) button1.setText("Unfollow"); else button1.setText("Follow");
+        if(subbed == 1) button2.setText("Unsub"); else button2.setText("Subscribe");
+        label9.setText("Your balance: " + balance);
+    }
+
     private void saveChangesPressed(ActionEvent e) {
         // TODO add your code here
         watcher.updateUserInfo(textField1.getText(), textField2.getText()); //newName, newBio pair
@@ -58,7 +80,25 @@ public class UserProfile extends JFrame {
 
     private void followPressed(ActionEvent e) {
         // TODO add your code here
-        watcher.follow(profileOf.getUsername());
+        if(follows == 1) watcher.follow(profileOf.getUsername(), 0); //Unfollow
+        else watcher.follow(profileOf.getUsername(), 1); //Follow
+
+        getUserPairInfo();
+    }
+
+    private void addMoneyPressed(ActionEvent e) {
+        // TODO add your code here
+        watcher.addMoney();
+
+        getUserPairInfo();
+    }
+
+    private void subPressed(ActionEvent e) {
+        // TODO add your code here
+        if(subbed == 1) watcher.sub(profileOf.getUsername(), 0); //Unsub
+        else watcher.sub(profileOf.getUsername(), 1); //Sub
+
+        getUserPairInfo();
     }
 
 
@@ -73,6 +113,8 @@ public class UserProfile extends JFrame {
         label4 = new JLabel();
         button1 = new JButton();
         button2 = new JButton();
+        label9 = new JLabel();
+        button4 = new JButton();
         label6 = new JLabel();
         label7 = new JLabel();
         textField1 = new JTextField();
@@ -135,11 +177,21 @@ public class UserProfile extends JFrame {
         //---- button1 ----
         button1.setText("Follow");
         button1.addActionListener(e -> followPressed(e));
-        contentPane.add(button1, "cell 2 7");
+        contentPane.add(button1, "cell 2 6");
 
         //---- button2 ----
         button2.setText("Subscribe");
-        contentPane.add(button2, "cell 4 7 3 1");
+        button2.addActionListener(e -> subPressed(e));
+        contentPane.add(button2, "cell 4 6 3 1");
+
+        //---- label9 ----
+        label9.setText("Your Balance: ");
+        contentPane.add(label9, "cell 2 7");
+
+        //---- button4 ----
+        button4.setText("Add paisa");
+        button4.addActionListener(e -> addMoneyPressed(e));
+        contentPane.add(button4, "cell 4 7");
 
         //---- label6 ----
         label6.setText("EDIT");
@@ -173,6 +225,8 @@ public class UserProfile extends JFrame {
     private JLabel label4;
     private JButton button1;
     private JButton button2;
+    private JLabel label9;
+    private JButton button4;
     private JLabel label6;
     private JLabel label7;
     private JTextField textField1;
