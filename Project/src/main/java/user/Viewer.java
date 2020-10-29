@@ -147,6 +147,34 @@ public class Viewer extends User implements Serializable {
         }
     }
 
+    public void sub(String streamerUsername, int bit) {
+        try {
+            oos.writeInt(ServerRequests.SUB.geti());
+            oos.flush();
+
+            oos.writeUTF(streamerUsername);
+            oos.flush();
+
+            oos.writeInt(bit);
+            oos.flush();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addMoney() {
+        try {
+            oos.writeInt(ServerRequests.ADDMONEY.geti());
+            oos.flush();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getNotifications() {
         String block = "";
         try {
@@ -165,8 +193,8 @@ public class Viewer extends User implements Serializable {
         return block;
     }
 
-    public boolean[] getUserPairInfo(User user) {
-        boolean[] ans;
+    public int[] getUserPairInfo(User user) {
+        int[] ans;
         try {
             oos.writeInt(ServerRequests.GETUSERPAIRINFO.geti());
             oos.flush();
@@ -174,13 +202,13 @@ public class Viewer extends User implements Serializable {
             oos.writeUTF(user.getUsername());
             oos.flush();
 
-            ans = (boolean[]) ois.readObject();
+            ans = (int[]) ois.readObject();
             return ans;
         }
         catch (Exception e) {
             e.printStackTrace();
         }
-        ans = new boolean[]{false, false};
+        ans = new int[]{0, 0, 0};
         return ans;
     }
 

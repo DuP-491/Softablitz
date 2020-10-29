@@ -37,7 +37,7 @@ public class AudioSender extends Thread {
             running = true;
         }
         catch(Exception e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
         }
     }
 
@@ -54,7 +54,7 @@ public class AudioSender extends Thread {
             msocket.send(dpacket);
         }
         catch (Exception e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
         }
     }
 

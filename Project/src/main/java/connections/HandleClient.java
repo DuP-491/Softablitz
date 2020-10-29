@@ -57,9 +57,10 @@ public class HandleClient extends Thread {
                 else if(ServerRequests.CHECKOUTUSER.compare(request)) { getUser(); }
                 else if(ServerRequests.UPDATEUSERINFO.compare(request)) { updateUserInfo(); }
                 else if(ServerRequests.FOLLOW.compare(request)) { addFollow(); }
-                else if(ServerRequests.SUB.compare(request)) { }
+                else if(ServerRequests.SUB.compare(request)) { addSub(); }
                 else if(ServerRequests.GETNOTIFICATIONS.compare(request)) { getNotifications(); }
                 else if(ServerRequests.GETUSERPAIRINFO.compare(request)) { getUserPairInfo(); }
+                else if(ServerRequests.ADDMONEY.compare(request)) { addMoney(); }
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -200,6 +201,30 @@ public class HandleClient extends Thread {
         }
     }
 
+    public void addSub() {
+        try {
+            String streamerusername = ois.readUTF();
+            int bit = ois.readInt();
+
+            Date time = new Date(); //stores current time according to server
+            java.sql.Timestamp nowTime = new java.sql.Timestamp(time.getTime());
+
+            dbHandler.addSub(username, streamerusername, bit, nowTime);
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void addMoney() {
+        try {
+            dbHandler.updateBalance(username, 1); //Add 1 paisa
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void getNotifications() {
         try {
             String[] streamers = dbHandler.getNotifications(username);
@@ -217,7 +242,7 @@ public class HandleClient extends Thread {
         try {
             String user2Username = ois.readUTF();
 
-            boolean[] ans = dbHandler.getUserPairInfo(username, user2Username);
+            int[] ans = dbHandler.getUserPairInfo(username, user2Username);
             oos.writeObject(ans);
             oos.flush();
 

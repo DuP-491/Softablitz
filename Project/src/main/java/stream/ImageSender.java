@@ -44,7 +44,7 @@ public class ImageSender extends Thread {
             robot = new Robot();
             running = true;
         } catch (Exception e) {
-           // e.printStackTrace();
+            // e.printStackTrace();
         }
     }
 
@@ -186,4 +186,3 @@ public class ImageSender extends Thread {
     }
 
 }
-

@@ -264,8 +264,88 @@ public class DBHandler {
         }
     }
 
-    public synchronized boolean[] getUserPairInfo(String user1, String user2) {
-        boolean[] ans = new boolean[2];  //0 stores followed, 1 stores subbed
+    public synchronized void addSub(String subberUsername, String streamerUsername, int bit, java.sql.Timestamp now) {
+        try {
+            if(bit == 1) { //Sub demand
+                String query = "select * from subs where subberusername=? and streamerusername=?";
+                PreparedStatement pst = connection.prepareStatement(query);
+                pst.setString(1, subberUsername);
+                pst.setString(2, streamerUsername);
+
+                ResultSet rs = pst.executeQuery();
+                if (rs.next()) {
+                    String update = "update subs set lastsubbed=? where subberusername=? and streamerusername=?";
+                    pst = connection.prepareStatement(update);
+                    pst.setTimestamp(1,now);
+                    pst.setString(2, subberUsername);
+                    pst.setString(3, streamerUsername);
+                } //If pair already exists then just update lastsubbed
+
+                else {
+                    String update = "insert into subs (subberusername, streamerusername, firstsubbed, lastsubbed) values(?,?,?,?)";
+                    pst = connection.prepareStatement(update);
+                    pst.setString(1, subberUsername);
+                    pst.setString(2, streamerUsername);
+                    pst.setTimestamp(3, now);
+                    pst.setTimestamp(4, now);
+
+                    pst.executeUpdate();
+                }
+                //Remove 5 bucks from viewer
+
+                updateBalance(subberUsername, -5);
+
+            }
+            else { //Unsub demand
+                String query = "delete from subs where subberusername=? and streamerusername=?";
+                PreparedStatement pst = connection.prepareStatement(query);
+
+                pst.setString(1, subberUsername);
+                pst.setString(2, streamerUsername);
+
+                pst.execute();
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public synchronized int getBalance(String username) {
+        try {
+            String query = "select * from users where username=?";
+            PreparedStatement pst = connection.prepareStatement(query);
+            pst.setString(1, username);
+            ResultSet rs = pst.executeQuery();
+
+            rs.next(); int bal = rs.getInt("balance");
+
+            return bal;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public synchronized void updateBalance(String username, int increment) {
+        try {
+            int bal = getBalance(username);
+
+            String update = "update users set balance=? where username=?";
+            PreparedStatement pst = connection.prepareStatement(update);
+            pst.setInt(1, bal + increment);
+            pst.setString(2, username);
+
+            pst.executeUpdate();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public synchronized int[] getUserPairInfo(String user1, String user2) {
+        int[] ans = new int[3];  //0 stores followed, 1 stores subbed
         try {
 
             String query = "select * from follows where followerusername=? and streamerusername=?";
@@ -274,15 +354,17 @@ public class DBHandler {
             pst.setString(2,user2);
             ResultSet rs = pst.executeQuery();
 
-            if(rs.next()) ans[0] = true; else ans[0] = false;
+            if(rs.next()) ans[0] = 1; else ans[0] = 0;
 
-            query = "select * from subs where followerusername=? and streamerusername=?";
+            query = "select * from subs where subberusername=? and streamerusername=?";
             pst = connection.prepareStatement(query);
             pst.setString(1,user1);
             pst.setString(2,user2);
             rs = pst.executeQuery();
 
-            if(rs.next()) ans[1] = true; else ans[1] = false;
+            if(rs.next()) ans[1] = 1; else ans[1] = 0;
+
+            ans[2] = getBalance(user1);
 
             return ans;
 
