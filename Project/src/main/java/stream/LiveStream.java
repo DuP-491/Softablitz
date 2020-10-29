@@ -5,9 +5,11 @@ import chat.ChatMessage;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
+import java.util.Queue;
 
 import chat.MessageReciever;
 import chat.MessageSender;
@@ -47,6 +49,7 @@ public class LiveStream implements Runnable, Serializable {
 
 
     public LiveStream(String title, Category cat, int id, String streamerUsername) {
+
         this.ID = id;
         this.streamerUsername = streamerUsername;
         this.category = cat;
@@ -146,7 +149,9 @@ public class LiveStream implements Runnable, Serializable {
 
     public void update() {
         try {
-            j.setIcon(imageReciever.currentFrame);
+            if(audioReciever.getCurrentTimestamp()>=imageReciever.WhatsTheLatestTimeStamp()){
+                j.setIcon(imageReciever.getLatestImage());
+            }
 
         } catch (Exception e) {
             //System.out.println("Cant get currentframe");

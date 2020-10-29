@@ -9,6 +9,8 @@ import java.net.InetAddress;
 import java.net.MulticastSocket;
 import java.nio.ByteBuffer;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class ImageReciever extends Thread {
     public static int HEADER_SIZE = 16;
@@ -22,8 +24,21 @@ public class ImageReciever extends Thread {
     public BufferedImage currentFrame;
     public long currentTimestamp;
     private boolean running;
+    class ImageSample{
+        BufferedImage image;
+        long timestamp;
+        public ImageSample(BufferedImage image, long timestamp) {
+            this.image = image;
+            this.timestamp = timestamp;
+        }
+    }
+    Queue<ImageSample> imageSampleQueue;
+    public long getCurrentTimestamp() {
+        return currentTimestamp;
+    }
 
     public ImageReciever(String id, LiveStream stream) {
+        imageSampleQueue=new LinkedList<ImageSample>();
         try {
             IP_ADDRESS = id;
             running = true;
@@ -103,8 +118,15 @@ public class ImageReciever extends Thread {
                 /* If image is complete dispay it */
                 if (slicesStored == slices) {
                     ByteArrayInputStream bis = new ByteArrayInputStream(imageData);
+
                     currentFrame = ImageIO.read(bis);
                     currentTimestamp = timeStamp;
+                    if(currentFrame!=null){
+                        synchronized (imageSampleQueue){
+                            imageSampleQueue.add(new ImageSample(currentFrame,currentTimestamp));
+                        }
+                    }
+
 //                    System.out.println("image timeStamp "+timeStamp);
 
                 }
@@ -122,6 +144,17 @@ public class ImageReciever extends Thread {
                 } catch (IOException e) {
                 }
             }
+        }
+    }
+
+    public long WhatsTheLatestTimeStamp(){
+        synchronized (imageSampleQueue) {
+            return imageSampleQueue.peek().timestamp;
+        }
+    }
+    public BufferedImage getLatestImage(){
+        synchronized (imageSampleQueue) {
+            return imageSampleQueue.remove().image;
         }
     }
 }

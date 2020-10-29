@@ -15,7 +15,12 @@ public class AudioReciever extends Thread {
     private static int PORT = 4444;
     private final static int HEADER_SIZE = 8;
     SourceDataLine speakers;
-    public long currentTimestamp;
+    private long currentTimestamp;
+
+    public long getCurrentTimestamp() {
+        return currentTimestamp;
+    }
+
     public static int CHUNK_SIZE = 128;
     private byte[] data;
     private byte[] buffer=new byte[CHUNK_SIZE+HEADER_SIZE];
