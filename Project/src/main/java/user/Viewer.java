@@ -5,6 +5,7 @@ import connections.ServerRequests;
 import stream.Category;
 import stream.LiveStream;
 
+import javax.swing.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -90,6 +91,91 @@ public class Viewer extends User implements Serializable {
     public void sendMessage(String content) {
         System.out.println(content);
         currentlyWatching.sendMessage(new ChatMessage(this.getUsername(),content,0));
+    }
+
+    public int checkOutUser(String username) {
+        try {
+            oos.writeInt(ServerRequests.CHECKOUTUSER.geti());
+            oos.flush();
+
+            oos.writeUTF(username);
+            oos.flush();
+
+            User user = (User) ois.readObject();
+            UserProfile userProfile = new UserProfile(user, this);
+            userProfile.setVisible(true);
+            userProfile.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+
+            return 0;
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    public void updateUserInfo(String newName, String newBio) {
+        try {
+            oos.writeInt(ServerRequests.UPDATEUSERINFO.geti());
+            oos.flush();
+
+            oos.writeUTF(newName);
+            oos.flush();
+
+            oos.writeUTF(newBio);
+            oos.flush();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void follow(String streamerUsername) {
+        try {
+            oos.writeInt(ServerRequests.FOLLOW.geti());
+            oos.flush();
+
+            oos.writeUTF(streamerUsername);
+            oos.flush();
+
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getNotifications() {
+        String block = "";
+        try {
+            oos.writeInt(ServerRequests.GETNOTIFICATIONS.geti());
+            oos.flush();
+
+            String[] streamers = (String[]) ois.readObject();
+            System.out.println(streamers.length);
+            for(int i = 0; i < streamers.length; i++) { if(streamers[i]==null) break; block += streamers[i] + " is livestreaming.\n"; }
+
+            return block;
+        }
+        catch(Exception e) {
+            e.printStackTrace();
+        }
+        return block;
+    }
+
+    public void unpause() {
+        currentlyWatching.unpause();
+    }
+
+    public void pause() {
+        currentlyWatching.pause();
+    }
+
+    public void unmute() {
+        currentlyWatching.unmute();
+    }
+
+    public void mute() {
+        currentlyWatching.mute();
     }
 
 }

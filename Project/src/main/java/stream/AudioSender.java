@@ -19,8 +19,17 @@ public class AudioSender extends Thread {
     private byte[] data;
 
     private boolean running;
+    private boolean isMuted;
 
     private int numBytesRead;
+
+    public void mute() {
+        isMuted = true;
+    }
+
+    public void unmute() {
+        isMuted = false;
+    }
 
     public AudioSender(String group) {
         try {
@@ -38,6 +47,7 @@ public class AudioSender extends Thread {
     }
 
     public void sendAudio() {
+        if(isMuted) return;
         try {
             msocket = new MulticastSocket();
             msocket.setTimeToLive(2);

@@ -54,4 +54,14 @@ public class LiveStreamSource extends LiveStream {
         //stopWatching();
         System.out.println("Stopped streaming");
     }
+
+    public void mute() {
+        audioSender.mute();
+        super.mute();
+    }
+
+    public void unmute() {
+        audioSender.unmute();
+        super.unmute();
+    }
 }

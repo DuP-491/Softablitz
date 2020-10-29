@@ -51,6 +51,9 @@ public class LiveStream implements Runnable, Serializable {
 
     private String messageBlock;
 
+    private boolean isPaused;
+    private boolean isMuted;
+
 
     public LiveStream(String title, Category cat, int id, String streamerUsername) {
 
@@ -60,6 +63,9 @@ public class LiveStream implements Runnable, Serializable {
         this.title = title;
         allUsersMessageQueue = new LinkedList<ChatMessage>();
         subOnlyMessageQueue = new LinkedList<ChatMessage>();
+
+        isPaused = false;
+        isMuted = false;
 
     }
 
@@ -153,12 +159,17 @@ public class LiveStream implements Runnable, Serializable {
 
     public void update() {
         try {
-            long a=audioReciever.getCurrentTimestamp();
-            long b=imageReciever.WhatsTheLatestTimeStamp();
-            if(a>=b){
-                j.setIcon(imageReciever.getLatestImage());
-            }
-
+           if(!isPaused){
+               long a=audioReciever.getCurrentTimestamp();
+              long b=imageReciever.WhatsTheLatestTimeStamp();
+              if(a>=b){
+                  j.setIcon(imageReciever.getLatestImage());
+              }
+           }
+          else{
+              imageReciever.getLatestImage();
+          }
+          
         } catch (Exception e) {
             //System.out.println("Cant get currentframe");
         }
@@ -185,5 +196,21 @@ public class LiveStream implements Runnable, Serializable {
     public void sendMessage(ChatMessage message) {
         System.out.println(message);
         messageSender.sendMessage(message);
+    }
+
+    public void pause() {
+        isPaused = true;
+    }
+
+    public void unpause() {
+        isPaused = false;
+    }
+
+    public void mute() {
+        audioReciever.mute();
+    }
+
+    public void unmute() {
+        audioReciever.unmute();
     }
 }

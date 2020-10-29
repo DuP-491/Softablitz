@@ -43,7 +43,8 @@ public class ImageReciever extends Thread {
         try {
             IP_ADDRESS = id;
             running = true;
-        } catch (Exception e) {
+        }catch (Exception e) {
+
             //e.printStackTrace();
         }
     }
@@ -55,6 +56,7 @@ public class ImageReciever extends Thread {
             e.printStackTrace();
         }
     }
+
 
     public void run() {
         boolean debug = false;
