@@ -3,18 +3,14 @@ package stream;
 import chat.ChatMessage;
 
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.LinkedList;
-import java.util.Queue;
 
 import chat.MessageReciever;
 import chat.MessageSender;
-import test.connections.Message;
-import user.Streamer;
 import user.Viewer;
 
 import javax.imageio.ImageIO;
@@ -54,6 +50,16 @@ public class LiveStream implements Runnable, Serializable {
     private boolean isPaused;
     private boolean isMuted;
 
+    private int innerWidth=900;
+    private int innerHeight=600;
+
+    public int getInnerWidth() {
+        return innerWidth;
+    }
+
+    public int getInnerHeight() {
+        return innerHeight;
+    }
 
     public LiveStream(String title, Category cat, int id, String streamerUsername) {
 
@@ -68,7 +74,23 @@ public class LiveStream implements Runnable, Serializable {
         isMuted = false;
 
     }
+    private BufferedImage resizeImage(BufferedImage originalImage, int targetWidth, int targetHeight) throws IOException {
+        Image resultingImage = originalImage.getScaledInstance(targetWidth, targetHeight, Image.SCALE_SMOOTH);
+        BufferedImage outputImage = new BufferedImage(targetWidth, targetHeight, BufferedImage.TYPE_INT_RGB);
+        outputImage.getGraphics().drawImage(resultingImage, 0, 0, null);
+        return outputImage;
+    }
+    private BufferedImage scaleThisImage(BufferedImage image)  {
+        try {
+            if (image.getWidth()>innerWidth){
+                return resizeImage(image, innerWidth,(int)(image.getHeight()* innerWidth/image.getWidth()));
+            }
 
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return image;
+    }
     public void setStartedAtTime(LocalDateTime s) {
         startedAtTime = s;
     }
@@ -164,7 +186,7 @@ public class LiveStream implements Runnable, Serializable {
                long a=audioReciever.getCurrentTimestamp();
               long b=imageReciever.WhatsTheLatestTimeStamp();
               if(a>=b){
-                  j.setIcon(imageReciever.getLatestImage());
+                  j.setIcon(scaleThisImage(imageReciever.getLatestImage()));
               }
            }
           else{

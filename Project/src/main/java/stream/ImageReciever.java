@@ -25,6 +25,9 @@ public class ImageReciever extends Thread {
     public BufferedImage currentFrame;
     public long currentTimestamp;
     private boolean running;
+    private int width;
+    private int height;
+
     class ImageSample{
         BufferedImage image;
         long timestamp;
@@ -39,10 +42,12 @@ public class ImageReciever extends Thread {
     }
 
     public ImageReciever(String id, LiveStream stream) {
+
         imageSampleQueue=new LinkedList<ImageSample>();
         try {
             IP_ADDRESS = id;
             running = true;
+
         }catch (Exception e) {
 
             //e.printStackTrace();
