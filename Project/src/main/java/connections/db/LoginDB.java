@@ -3,10 +3,14 @@ package connections.db;
 import connections.IDAssigner;
 import user.Status;
 import user.User;
+import utils.Utils;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 import java.sql.*;
 
 public class LoginDB {
+    private static final String SALT="MNNITGGQUERIES";
     private Connection connection;
 
     public LoginDB() {
@@ -23,6 +27,7 @@ public class LoginDB {
     public synchronized int registerUser(String username, String name, String password) {
         try {
             //First check if username exists in Users
+            password= Utils.hashIt(password,SALT);
             String query = "Select * from authentication where username=?";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1,username);
@@ -56,12 +61,17 @@ public class LoginDB {
     public synchronized User loginUser(String username, String password) {
         try {
             //Check if correct credentials
+//
+            password= Utils.hashIt(password,SALT);
             String query = "Select * from authentication where username=?";
             PreparedStatement ps = connection.prepareStatement(query);
             ps.setString(1,username);
 
             ResultSet rs = ps.executeQuery();
             if(!rs.next()) return null; //Already exists
+
+
+
             if(!rs.getString("password").equals(password)) return null;
 
             User self = getUserByUsername(username);
