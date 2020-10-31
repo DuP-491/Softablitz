@@ -12,6 +12,9 @@ import java.nio.ByteBuffer;
 
 public class ImageSender extends Thread {
 
+
+    private static final int CAPTURE_SCREEN_WIDTH = 1366;
+    private static final int CAPTURE_SCREEN_HEIGHT = 768;
     private BufferedImage currentFrame;
     private ImageIcon im;
     private Webcam webcam;
@@ -44,6 +47,7 @@ public class ImageSender extends Thread {
             webcam.open();
             robot = new Robot();
             running = true;
+
         } catch (Exception e) {
             // e.printStackTrace();
         }
@@ -186,7 +190,7 @@ public class ImageSender extends Thread {
 
     public void captureScreen() {
         try {
-            Dimension screenSize = new Dimension(640,480); //Temporary, because scale method is very slow
+            Dimension screenSize = new Dimension(CAPTURE_SCREEN_WIDTH,CAPTURE_SCREEN_HEIGHT); //Temporary, because scale method is very slow
             Rectangle screenRectangle = new Rectangle(screenSize);
             this.currentFrame = robot.createScreenCapture(screenRectangle);
 
