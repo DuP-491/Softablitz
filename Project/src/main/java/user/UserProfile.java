@@ -62,7 +62,7 @@ public class UserProfile extends JFrame {
     }
 
     public void getUserPairInfo() {
-        int[] ans = watcher.getUserPairInfo(profileOf);
+        int[] ans = watcher.getUserPairInfo(profileOf.getUsername());
 
         follows = ans[0];
         subbed = ans[1];

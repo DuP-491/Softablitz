@@ -46,7 +46,14 @@ public class StreamWindow extends JFrame {
         // TODO add your code here
         String text = textField2.getText();
         System.out.println(text);
-        viewer.sendMessage(text);
+        viewer.sendAllUsersMessage(text);
+    }
+
+    private void subMessagePressed(ActionEvent e) {
+        // TODO add your code here
+        String text = textField1.getText();
+        System.out.println(text);
+        viewer.sendSubMessage(text);
     }
 
     private void PausePressed(ActionEvent e) {
@@ -186,13 +193,12 @@ public class StreamWindow extends JFrame {
 
         //======== panel1 ========
         {
-            panel1.setBorder ( new javax . swing. border .CompoundBorder ( new javax . swing. border .TitledBorder ( new
-            javax . swing. border .EmptyBorder ( 0, 0 ,0 , 0) ,  "JF\u006frm\u0044es\u0069gn\u0065r \u0045va\u006cua\u0074io\u006e" , javax
-            . swing .border . TitledBorder. CENTER ,javax . swing. border .TitledBorder . BOTTOM, new java
-            . awt .Font ( "D\u0069al\u006fg", java .awt . Font. BOLD ,12 ) ,java . awt
-            . Color .red ) ,panel1. getBorder () ) ); panel1. addPropertyChangeListener( new java. beans .
-            PropertyChangeListener ( ){ @Override public void propertyChange (java . beans. PropertyChangeEvent e) { if( "\u0062or\u0064er" .
-            equals ( e. getPropertyName () ) )throw new RuntimeException( ) ;} } );
+            panel1.setBorder(new javax.swing.border.CompoundBorder(new javax.swing.border.TitledBorder(new javax.swing.border
+            .EmptyBorder(0,0,0,0), "JFor\u006dDesi\u0067ner \u0045valu\u0061tion",javax.swing.border.TitledBorder.CENTER,javax
+            .swing.border.TitledBorder.BOTTOM,new java.awt.Font("Dia\u006cog",java.awt.Font.BOLD,
+            12),java.awt.Color.red),panel1. getBorder()));panel1. addPropertyChangeListener(new java.beans
+            .PropertyChangeListener(){@Override public void propertyChange(java.beans.PropertyChangeEvent e){if("bord\u0065r".equals(e.
+            getPropertyName()))throw new RuntimeException();}});
             panel1.setLayout(new MigLayout(
                 "hidemode 3",
                 // columns
@@ -221,6 +227,7 @@ public class StreamWindow extends JFrame {
 
             //---- button1 ----
             button1.setText("Post");
+            button1.addActionListener(e -> subMessagePressed(e));
             panel1.add(button1, "cell 4 2,width 80:80:80");
 
             //---- label6 ----
@@ -278,11 +285,11 @@ public class StreamWindow extends JFrame {
         );
     }
 
-    public void markAsViewer(Viewer self) {
+    public void markAsViewer(Viewer self, String streamerUsername) {
         this.viewer = self;
-        button1.setVisible(true);
+        button1.setVisible(false);
         button2.setVisible(true);
-        textField1.setVisible(true);
+        textField1.setVisible(false);
         textField2.setVisible(true);
 
         addWindowListener(
@@ -297,6 +304,12 @@ public class StreamWindow extends JFrame {
         );
 
         System.out.println("Marked viewer");
+        
+        int[] userPairInfo = viewer.getUserPairInfo(streamerUsername);
+        if(userPairInfo[1] == 1) { //If subbed
+            textField1.setVisible(true);
+            button1.setVisible(true);
+        }
     }
 
     public void setIcon(BufferedImage image) {
@@ -307,8 +320,12 @@ public class StreamWindow extends JFrame {
         label3.setText(title);
     }
 
-    public void setMessageBlockText(String messageBlock) {
+    public void setallUsersMessageBlockText(String messageBlock) {
         textArea3.setText(messageBlock);
+    }
+
+    public void setSubOnlyMessageBlockText(String messageBlock) {
+        textArea2.setText(messageBlock);
     }
 
     public Viewer getViewer() { return this.viewer; }

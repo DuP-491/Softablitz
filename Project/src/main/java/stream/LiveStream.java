@@ -45,7 +45,8 @@ public class LiveStream implements Runnable, Serializable {
 
     protected StreamWindow j;
 
-    private String messageBlock;
+    private String allUsersmessageBlock;
+    private String subOnlyMessageBlock;
 
     private boolean isPaused;
     private boolean isMuted;
@@ -150,12 +151,19 @@ public class LiveStream implements Runnable, Serializable {
 
     public void refreshMessages() {
         //update both sub only and all user chat window
-        messageBlock = "";
+        allUsersmessageBlock = "";
         for(int i = 0; i < allUsersMessageQueue.size(); i++) {
-            messageBlock += allUsersMessageQueue.get(i).toString();
-            messageBlock += "\n";
+            allUsersmessageBlock += allUsersMessageQueue.get(i).toString();
+            allUsersmessageBlock += "\n";
         }
-        j.setMessageBlockText(messageBlock);
+        j.setallUsersMessageBlockText(allUsersmessageBlock);
+
+        subOnlyMessageBlock = "";
+        for(int i = 0; i < subOnlyMessageQueue.size(); i++) {
+            subOnlyMessageBlock += subOnlyMessageQueue.get(i).toString();
+            subOnlyMessageBlock += "\n";
+        }
+        j.setSubOnlyMessageBlockText(subOnlyMessageBlock);
         //System.out.println("refreshed");
     }
 
@@ -213,7 +221,7 @@ public class LiveStream implements Runnable, Serializable {
     }
 
     public void markAsViewer(Viewer self) {
-        j.markAsViewer(self);
+        j.markAsViewer(self, streamerUsername);
     }
 
     public void sendMessage(ChatMessage message) {

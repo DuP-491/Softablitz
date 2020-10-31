@@ -35,18 +35,18 @@ public class LoginDB {
             ResultSet rs = ps.executeQuery();
             if(rs.next()) return -1; //Already exists
 
-            String update = "insert into users (username,name) values (?,?)";
+            String update = "insert into users (username,name,status) values (?,?,?)";
             ps = connection.prepareStatement(update);
             ps.setString(1,username);
             ps.setString(2,name);
+            ps.setInt(3,0);
 
             ps.executeUpdate();
 
-            update = "insert into authentication (username,password,status) values (?,?,?)";
+            update = "insert into authentication (username,password) values (?,?)";
             ps = connection.prepareStatement(update);
             ps.setString(1,username);
             ps.setString(2,password);
-            ps.setInt(3,0);
 
             ps.executeUpdate();
 

@@ -88,9 +88,14 @@ public class Viewer extends User implements Serializable {
         //query for follows in DB and update this.followList
     }
 
-    public void sendMessage(String content) {
+    public void sendAllUsersMessage(String content) {
         System.out.println(content);
         currentlyWatching.sendMessage(new ChatMessage(this.getUsername(),content,0));
+    }
+
+    public void sendSubMessage(String content) {
+        System.out.println(content);
+        currentlyWatching.sendMessage(new ChatMessage(this.getUsername(),content,1));
     }
 
     public int checkOutUser(String username) {
@@ -193,13 +198,13 @@ public class Viewer extends User implements Serializable {
         return block;
     }
 
-    public int[] getUserPairInfo(User user) {
+    public int[] getUserPairInfo(String username) {
         int[] ans;
         try {
             oos.writeInt(ServerRequests.GETUSERPAIRINFO.geti());
             oos.flush();
 
-            oos.writeUTF(user.getUsername());
+            oos.writeUTF(username);
             oos.flush();
 
             ans = (int[]) ois.readObject();
