@@ -6,6 +6,7 @@ package user;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.time.format.DateTimeFormatter;
 import javax.swing.*;
 import net.miginfocom.swing.*;
 
@@ -55,10 +56,16 @@ public class UserProfile extends JFrame {
             textField2.setVisible(false);
             button3.setVisible(false);
         }
+
         label2.setText(user.getUsername());
         label3.setText(user.getStatus().toString());
         label4.setText(user.getBio());
         label5.setText(user.getName());
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formatDateTime = user.getLastseen().format(formatter);
+        label10.setText("Last Seen : " + formatDateTime);
+        if(user.getStatus() != Status.OFFLINE) label10.setVisible(false);
     }
 
     public void getUserPairInfo() {
@@ -111,6 +118,7 @@ public class UserProfile extends JFrame {
         label5 = new JLabel();
         label3 = new JLabel();
         label4 = new JLabel();
+        label10 = new JLabel();
         button1 = new JButton();
         button2 = new JButton();
         label9 = new JLabel();
@@ -174,6 +182,10 @@ public class UserProfile extends JFrame {
         label4.setText("BIO");
         contentPane.add(label4, "cell 2 4");
 
+        //---- label10 ----
+        label10.setText("Last Seen:");
+        contentPane.add(label10, "cell 4 4");
+
         //---- button1 ----
         button1.setText("Follow");
         button1.addActionListener(e -> followPressed(e));
@@ -223,6 +235,7 @@ public class UserProfile extends JFrame {
     private JLabel label5;
     private JLabel label3;
     private JLabel label4;
+    private JLabel label10;
     private JButton button1;
     private JButton button2;
     private JLabel label9;

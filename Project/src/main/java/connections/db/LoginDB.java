@@ -8,6 +8,8 @@ import utils.Utils;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.sql.*;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 public class LoginDB {
     private static final String SALT="MNNITGGQUERIES";
@@ -35,11 +37,14 @@ public class LoginDB {
             ResultSet rs = ps.executeQuery();
             if(rs.next()) return -1; //Already exists
 
-            String update = "insert into users (username,name,status) values (?,?,?)";
+            String update = "insert into users (username,name,status,lastseen) values (?,?,?,?)";
             ps = connection.prepareStatement(update);
             ps.setString(1,username);
             ps.setString(2,name);
             ps.setInt(3,0);
+            java.util.Date time = new Date(); //stores current time according to server
+            java.sql.Timestamp nowTime = new java.sql.Timestamp(time.getTime());
+            ps.setTimestamp(4,nowTime);
 
             ps.executeUpdate();
 
@@ -106,7 +111,10 @@ public class LoginDB {
                     case 3: status = Status.STREAMING; break;
                     default: break;
                 }
-                return (new User(searchTerm,name,bio,status));
+                LocalDateTime lastseen = rs.getTimestamp("lastseen").toLocalDateTime();
+                User target = new User(searchTerm,name,bio,status);
+                target.setLastseen(lastseen);
+                return target;
             }
         }
         catch(SQLException e) {

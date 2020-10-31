@@ -103,7 +103,10 @@ public class DBHandler {
                     case 3: status = Status.STREAMING; break;
                     default: break;
                 }
-                return (new User(searchTerm,name,bio,status));
+                LocalDateTime lastseen = rs.getTimestamp("lastseen").toLocalDateTime();
+                User target = new User(searchTerm,name,bio,status);
+                target.setLastseen(lastseen);
+                return target;
             }
         }
         catch(SQLException e) {
@@ -210,6 +213,21 @@ public class DBHandler {
 
         }
         catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public synchronized void setLastSeen(String selfUsername, java.sql.Timestamp now) {
+        try {
+            String update = "update users set lastseen=? where username=?";
+            PreparedStatement pst = connection.prepareStatement(update);
+
+            pst.setTimestamp(1, now);
+            pst.setString(2, selfUsername);
+            pst.executeUpdate();
+
+        }
+        catch(Exception e) {
             e.printStackTrace();
         }
     }

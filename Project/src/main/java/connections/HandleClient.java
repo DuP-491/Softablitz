@@ -257,6 +257,10 @@ public class HandleClient extends Thread {
         try {
             dbHandler.setStatus(username, Status.OFFLINE);
 
+            Date time = new Date(); //stores current time according to server
+            java.sql.Timestamp nowTime = new java.sql.Timestamp(time.getTime());
+            dbHandler.setLastSeen(username, nowTime);
+
             running = false;
             socket.close();
             oos.close();
